@@ -1,5 +1,10 @@
 import React from "react";
-import { LoginOutlined, LogoutOutlined, FormOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
 import { Button, Menu } from "antd";
 import { useNavigate } from "react-router";
 
@@ -48,7 +53,18 @@ const Header = () => {
           </Button>
         </div>
       ) : (
-        <div>
+        <div className="p-2 flex flex-row">
+          <Button
+            className="m-2"
+            type="default"
+            onClick={(e) => {
+              navigate("/account");
+            }}
+            shape="round"
+            icon={<UserOutlined />}
+          >
+            Account
+          </Button>
           <Button
             className="m-2"
             type="default"

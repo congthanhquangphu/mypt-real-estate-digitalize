@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken')
 const Account = require('../models/account')
 const config = require('../config/config')
+const jwt = require('jsonwebtoken')
 
 const login = (req, res) => {
     data = {
@@ -8,7 +8,6 @@ const login = (req, res) => {
         password: req.body.password,
     }
     Account.login(data, (err, result) => {
-        console.log(result)
         if (err) {
             res.send({
                 exitcode: 1,
@@ -19,7 +18,7 @@ const login = (req, res) => {
         if (result && result.rows.length > 0) {
             account = result.rows[0]
             payload = {
-                email: result.email,
+                email: account.email,
             }
             res.send({
                 exitcode: 0,
@@ -82,6 +81,27 @@ const signup = (req, res) => {
 }
 
 const getInformation = (req, res) => {
+    data = {
+        email: req.payload.email,
+    }
+    Account.getInformation(data, (err, result) => {
+        if (err) {
+            res.send({
+                exitcode: 1,
+                message: "Cannot create account"
+            })
+            return;
+        }
+        if (result) {
+            const account = result.rows[0];
+            res.send({
+                exitcode: 0,
+                fullname: account.fullname,
+                email: account.email,
+                wallet_address: account.wallet_address
+            })
+        }
+    })
 }
 
 

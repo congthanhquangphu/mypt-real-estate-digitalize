@@ -47,12 +47,23 @@ const checkExist = (data, resultCallback) => {
     })
 }
 
-const changeInformation = (data, resultCallback) => {
+const getInformation = (data, resultCallback) => {
+    const email = data.email;
+
+    db.pool.query("SELECT fullname, email, wallet_address FROM ACCOUNT WHERE email=$1",[
+        email
+    ], (err, res) => {
+        if (err) {
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res);
+    })
 }
 
 module.exports = {
     signup,
     login,
     checkExist,
-    changeInformation,
+    getInformation,
 }

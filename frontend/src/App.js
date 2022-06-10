@@ -8,6 +8,8 @@ import RealEstatePage from './pages/RealEstatePage';
 import AboutUsPage from './pages/AboutUsPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import AccountPage from './pages/AccountPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -17,11 +19,13 @@ function App() {
         <div className='bg-[#ececec] h-5/6 flex justify-center place-items-center'>
           <Routes>
             <Route path="/" exact element={<HomePage />} />
-            <Route path="/home" exact element={<HomePage />} />
-            <Route path="/real_estate" exact element={<RealEstatePage />} />
-            <Route path="/about_us" exact element={<AboutUsPage />} />
-            <Route path="/login" exact element={<LoginPage />} />
-            <Route path="/signup" exact element={<SignupPage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/real_estate" element={<RealEstatePage />} />
+            <Route path="/about_us" element={<AboutUsPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/account" element={<AccountPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
         <Footer />

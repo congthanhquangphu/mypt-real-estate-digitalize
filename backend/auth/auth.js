@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+
 const auth = (req, res, next) => {
     if (config.server.noTokenUrl.indexOf(req.url) == -1) {
         //In token url
@@ -7,14 +9,14 @@ const auth = (req, res, next) => {
             if (err) {
                 res.status(403);
                 res.send({
-                    exitcode: 2,
+                    exitcode: 1,
                     message: err
                 })
                 return
             }
 
             req.payload = {
-                username: decoded.username
+                email: decoded.email
             }
             next()
         })
