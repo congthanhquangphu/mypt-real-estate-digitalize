@@ -8,11 +8,11 @@
     "express-fileupload": "^1.2.1",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
-    "node-postgres": "^0.6.2",
+    "pg": "^8.7.3",
     "web3": "^1.7.3"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "author": "Do Vuong Phuc",
   "license": "ISC"

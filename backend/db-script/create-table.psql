@@ -1,7 +1,7 @@
 CREATE TABLE "account" (
   "fullname" varchar,
   "email" varchar PRIMARY KEY,
-  "password" char(256),
+  "password" char(65),
   "wallet_address" varchar
 );
 

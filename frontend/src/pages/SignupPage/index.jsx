@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import { Button, Input } from "antd";
+import React, { useState, useRef } from "react";
+import { Button, Input, message as AntMessage } from "antd";
 import {
   UserOutlined,
   MailOutlined,
   ApiOutlined,
   LockOutlined,
 } from "@ant-design/icons";
+import { sha256 } from "js-sha256";
 import { useNavigate } from "react-router";
-import { connectMetamask, getAccounts, isConnected } from "../../utils/metamask";
+import {
+  connectMetamask,
+  getAccounts,
+  isConnected,
+} from "../../utils/metamask";
 import { useEffect } from "react";
-import api from '../../utils/api';
+import api from "../../utils/api";
 
 const SignupPage = () => {
   const navigator = useNavigate();
@@ -17,14 +22,37 @@ const SignupPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [wallet, setWallet] = useState();
+  const [canSubmit, setCanSubmit] = useState(false);
 
   useEffect(() => {
     refreshData();
-    console.log(wallet);
-  }, []);
+  });
+
+  const onFullnameChange = (e) => {
+    setFullname(e.target.value);
+    updateCanSubmit();
+  };
+
+  const onEmailChange = (e) => {
+    setEmail(e.target.value);
+    updateCanSubmit();
+  };
+
+  const onPasswordChange = (e) => {
+    setPassword(e.target.value);
+    updateCanSubmit();
+  };
+
+  const updateCanSubmit = () => {
+    setCanSubmit(
+      fullname !== "" && email !== "" && password !== "" && wallet !== ""
+    );
+  };
 
   const refreshData = async () => {
-    setWallet(await getAccounts());
+    const wallet = await getAccounts();
+    setWallet(wallet);
+    updateCanSubmit();
   };
 
   const onConnect = () => {
@@ -33,21 +61,28 @@ const SignupPage = () => {
   };
 
   const onSubmit = () => {
-    if (fullname === "" || email === "" || password === "") {
-      alert("Please fill-in all the data");
-      return;
-    }
-    if (wallet === "") {
-      alert("Please connect to your wallet");
-      return;
-    }
     const data = {
       fullname: fullname,
       email: email,
-      password: password,
-      wallet: wallet,
-    };  
-    api.post('/accounts/login', data)
+      password: sha256(password),
+      wallet_address: wallet,
+    };
+    api
+      .post("/account/signup", data)
+      .then((res) => {
+        const data = res.data;
+        const exitcode = data.exitcode;
+        const message = data.message;
+        if (exitcode === 0) {
+          AntMessage.success(message);
+          navigator("/login");
+        } else {
+          AntMessage.error(message);
+        }
+      })
+      .catch((err) => {
+        AntMessage.error("Request fail");
+      });
   };
 
   return (
@@ -60,7 +95,7 @@ const SignupPage = () => {
           <Input
             size="middle"
             value={fullname}
-            onChange={(e) => setFullname(e.target.value)}
+            onChange={onFullnameChange}
             placeholder="Full name"
             prefix={<UserOutlined />}
           />
@@ -71,14 +106,14 @@ const SignupPage = () => {
             placeholder="Email"
             prefix={<MailOutlined />}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={onEmailChange}
           />
         </div>
         <div className="m-2">
           <Input.Password
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={onPasswordChange}
             size="middle"
             prefix={<LockOutlined />}
           />
@@ -87,13 +122,14 @@ const SignupPage = () => {
         <h3>Wallet information</h3>
         <div className="m-2 justify-between items-center flex flex-row">
           <div>Wallet address:</div>
-          { isConnected() ? (
+          {isConnected() ? (
             <div>{wallet}</div>
           ) : (
             <div>
               <Button
                 className="w-full"
                 type="primary"
+                style={{ backgroundColor: "green" }}
                 shape="round"
                 icon={<ApiOutlined />}
                 onClick={onConnect}
@@ -106,19 +142,11 @@ const SignupPage = () => {
         <hr className="m-2" />
         <div className="m-2 flex flex-row justify-between">
           <Button
-            shape="round"
-            style={{ backgroundColor: "#e7e7e7" }}
-            className="center w-full m-2"
-            onClick={() => navigator("/")}
-          >
-            Back to home
-          </Button>
-          <Button
             type="primary"
-            style={{ backgroundColor: "green" }}
             shape="round"
             className="center w-full m-2"
             onClick={onSubmit}
+            disabled={!canSubmit}
           >
             Registry
           </Button>

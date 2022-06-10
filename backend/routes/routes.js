@@ -1,6 +1,6 @@
 const accountRoutes = require('./account')
 
-function assignRoutes(app){
+const assignRoutes = (app) =>{
     accountRoutes.assignRoutes(app)
 }
 
