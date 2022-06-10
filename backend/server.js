@@ -1,11 +1,11 @@
-const express = require('express')
-app = express()
-route = require('./routes/routes')
-jwt = require('jsonwebtoken')
-config = require('./config/config')
-cors = require('cors')
-log = require('./log/log')
-auth = require('./auth/auth')
+const   express = require('express')
+        app = express()
+        route = require('./routes/routes')
+        jwt = require('jsonwebtoken')
+        config = require('./config/config')
+        cors = require('cors')
+        log = require('./log/log')
+        auth = require('./auth/auth')
 
 //==================== Library =======================
 

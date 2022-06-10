@@ -6,7 +6,7 @@ CREATE TABLE "account" (
 );
 
 CREATE TABLE "property" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "seller" varchar,
   "title" varchar,
   "total_supply" int,
@@ -29,14 +29,14 @@ CREATE TABLE "property_meta" (
 );
 
 CREATE TABLE "property_image" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "property_id" int,
   "path" varchar,
   "is_primary" bool
 );
 
 CREATE TABLE "transaction" (
-  "id" int PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "email" varchar,
   "property_id" int,
   "amount" int,
@@ -44,7 +44,7 @@ CREATE TABLE "transaction" (
 );
 
 ALTER TABLE "property" ADD FOREIGN KEY ("seller") REFERENCES "account" ("email");
-ALTER TABLE "property" ADD FOREIGN KEY ("id") REFERENCES "property_meta" ("property_id");
-ALTER TABLE "property" ADD FOREIGN KEY ("id") REFERENCES "property_image" ("property_id");
+ALTER TABLE "property_meta" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
+ALTER TABLE "property_image" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
 ALTER TABLE "transaction" ADD FOREIGN KEY ("email") REFERENCES "account" ("email");
 ALTER TABLE "transaction" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");

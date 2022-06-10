@@ -5,8 +5,7 @@ function assignRoutes(app) {
     app.post('/account/signup',account.signup);
     app.get('/account/getInformation',account.getInformation);
     app.post('/account/changePassword',account.changePassword);
-    app.post('/account/changeInformation',account.changeInformation)
-    app.post('/account/topUp',account.topUp)
+    app.post('/account/changeInformation',account.changeInformation);
 }
 
 module.exports = {
