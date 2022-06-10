@@ -11,6 +11,11 @@ const menuItem = ["Home", "Real estate", "About us"].map((key) => ({
 const Header = () => {
   let navigate = useNavigate();
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <header className="flex justify-between flex-row items-center">
       <div className="mt-5 w-full">
@@ -21,26 +26,40 @@ const Header = () => {
           onClick={(item) => navigate(`/${item.key}`)}
         />
       </div>
-      <div className="p-2 flex flex-row">
-        <Button
-          className="m-2"
-          type="default"
-          shape="round"
-          onClick={()=>navigate("/login")}
-          icon={<LoginOutlined />}
-        >
-          Login
-        </Button>
-        <Button
-          className="m-2"
-          type="default"
-          onClick={()=>navigate("/signup")}
-          shape="round"
-          icon={<FormOutlined />}
-        >
-          Sign up
-        </Button>
-      </div>
+      {localStorage.token == null ? (
+        <div className="p-2 flex flex-row">
+          <Button
+            className="m-2"
+            type="default"
+            shape="round"
+            onClick={() => navigate("/login")}
+            icon={<LoginOutlined />}
+          >
+            Login
+          </Button>
+          <Button
+            className="m-2"
+            type="default"
+            onClick={() => navigate("/signup")}
+            shape="round"
+            icon={<FormOutlined />}
+          >
+            Sign up
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <Button
+            className="m-2"
+            type="default"
+            onClick={logout}
+            shape="round"
+            icon={<LogoutOutlined />}
+          >
+            Logout
+          </Button>
+        </div>
+      )}
     </header>
   );
 };

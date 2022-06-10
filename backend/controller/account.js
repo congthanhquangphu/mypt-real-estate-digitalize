@@ -4,10 +4,11 @@ const config = require('../config/config')
 
 const login = (req, res) => {
     data = {
-        username: req.body.username,
+        email: req.body.email,
         password: req.body.password,
     }
-    Account.login(data, (err, account) => {
+    Account.login(data, (err, result) => {
+        console.log(result)
         if (err) {
             res.send({
                 exitcode: 1,
@@ -15,11 +16,10 @@ const login = (req, res) => {
                 message: err
             })
         }
-
-        if (account.length > 0) {
-            account = account[0]
+        if (result && result.rows.length > 0) {
+            account = result.rows[0]
             payload = {
-                username: account.username,
+                email: result.email,
             }
             res.send({
                 exitcode: 0,
@@ -30,7 +30,7 @@ const login = (req, res) => {
             })
         } else {
             res.send({
-                exitcode: 104,
+                exitcode: 2,
                 token: '',
                 message: "Incorrect password or username"
             })

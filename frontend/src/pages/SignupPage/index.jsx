@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Button, Input, message as AntMessage } from "antd";
 import {
   UserOutlined,
@@ -28,19 +28,20 @@ const SignupPage = () => {
     refreshData();
   });
 
+  useEffect(() => {
+    updateCanSubmit();
+  }, [fullname, email, password, wallet]);
+
   const onFullnameChange = (e) => {
     setFullname(e.target.value);
-    updateCanSubmit();
   };
 
   const onEmailChange = (e) => {
     setEmail(e.target.value);
-    updateCanSubmit();
   };
 
   const onPasswordChange = (e) => {
     setPassword(e.target.value);
-    updateCanSubmit();
   };
 
   const updateCanSubmit = () => {

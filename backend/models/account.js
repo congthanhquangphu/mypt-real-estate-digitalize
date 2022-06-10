@@ -19,6 +19,18 @@ const signup = (data, resultCallback) => {
 
 
 const login = (data, resultCallback) => {
+    const email = data.email;
+    const password = data.password;
+
+    db.pool.query('SELECT email FROM ACCOUNT WHERE email=$1 AND password=$2', [
+        email, password
+    ], (err, res) => {
+        if (err) {
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res);
+    })
 }
 
 const checkExist = (data, resultCallback) => {
