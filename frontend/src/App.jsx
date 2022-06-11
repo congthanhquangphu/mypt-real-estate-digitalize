@@ -13,10 +13,10 @@ import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
-    <div className='h-screen'>
+    <div className='h-screen overflow-x-scroll'>
       <Router>
         <Header/>
-        <div className='bg-[#ececec] h-5/6 flex justify-center place-items-center'>
+        <div className='bg-[#ececec] min-h-full flex justify-center place-items-center'>
           <Routes>
             <Route path="/" exact element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./style.css";
-import default_avatar from "./../../res/default_avatar.png";
 import { useEffect } from "react";
-import api from "../../utils/api";
+import * as account from "services/account";
 import { useNavigate } from "react-router";
+import AccountCard from "components/AccountCard";
+import ListTransactionsCard from "components/TransactionCard";
 
 const AccountPage = () => {
   const [fullname, setFullname] = useState("");
@@ -15,197 +16,52 @@ const AccountPage = () => {
     refreshData();
   }, []);
 
+  const transactions = [];
+  for (let i = 0; i < 100; i++) {
+    transactions.push({
+      key: `0x000${i}`,
+      hash: `0x000${i}`,
+      sender: "0x0001",
+      receiver: "0x0002",
+      amount: 10,
+      token: "ETH",
+    });
+  }
+
   const refreshData = () => {
-    api
-      .get("/account/getInformation", {
-        headers: {
-          "x-access-token": localStorage.token,
-        },
-      })
-      .then((res) => {
-        const data = res.data;
-        if (data.exitcode === 0) {
-          setFullname(data.fullname);
-          setEmail(data.email);
-          setWallet(data.wallet_address);
-        } else {
-          navigator("/");
-        }
-      })
-      .catch((err) => {
+    const data = {
+      headers: {
+        "x-access-token": localStorage.token,
+      },
+    };
+    account.getInformation(data, (err, res) => {
+      if (err) {
         navigator("/");
-      });
+        return;
+      }
+
+      const data = res.data;
+      if (data.exitcode === 0) {
+        setFullname(data.fullname);
+        setEmail(data.email);
+        setWallet(data.wallet_address);
+      } else {
+        navigator("/");
+      }
+    });
   };
 
   return (
-    <div className="h-full">
-      <div className="flex flex-row h-2/3 p-2">
-        <div className="w-fit h-full p-5 m-2 bg-white rounded-xl">
-          <h1>User information</h1>
-          <hr className="p-2" />
-          <div className="flex justify-center m-2">
-            <img
-              src={default_avatar}
-              alt="avatar"
-              style={{ borderRadius: 0.5, width: "128px" }}
-            />
-          </div>
-          <div className="flex justify-center m-2">
-            <h1>{fullname}</h1>
-          </div>
-          <div className="m-2">
-            <div>
-              <div>
-                <span>
-                  <b>Email: </b> {email}
-                </span>
-              </div>
-            </div>
-            <b>Wallet address: </b>
-            <div>{wallet}</div>
-          </div>
-        </div>
-        <div className="p-5 m-2 bg-white flex flex-col rounded-xl">
-          <div>
-            <h1>Transaction</h1>
-            <hr className="p-2" />
-          </div>
-          <div className="overflow-x-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Transaction hash</th>
-                  <th>Sender address</th>
-                  <th>Receive address</th>
-                  <th>Amount</th>
-                  <th>Token</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-                <tr>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                  <td>a</td>
-                </tr>
-              </tbody>
-              <tfoot />
-            </table>
-          </div>
-        </div>
+    <div className="h-[80vh]">
+      <div className="flex max-h-[80%] flex-row p-2">
+        <AccountCard
+          fullname={fullname}
+          email={email}
+          wallet={wallet}
+          coinETH={0}
+          coinNPT={0}
+        />
+        <ListTransactionsCard transactions={transactions} />
       </div>
     </div>
   );
