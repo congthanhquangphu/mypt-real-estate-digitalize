@@ -1,27 +1,27 @@
 CREATE TABLE "account" (
   "fullname" varchar,
   "email" varchar PRIMARY KEY,
-  "password" char(65),
+  "password" char(256),
   "wallet_address" varchar
 );
 
 CREATE TABLE "property" (
-  "id" SERIAL PRIMARY KEY,
+  "id" serial PRIMARY KEY,
   "seller" varchar,
   "title" varchar,
   "total_supply" int,
-  "contract_id" varchar,
-  "status" int
+  "status" varchar
 );
 
 CREATE TABLE "property_meta" (
   "property_id" int PRIMARY KEY,
+  "location" varchar,
   "land_area" int,
   "construct_area" int,
   "purpose_id" int,
   "legal_id" int,
-  "invest_end_date" timestamp,
-  "apr" int,
+  "invest_time" real,
+  "profit" real,
   "uses_form_id" int,
   "video_path" varchar,
   "description" text,
@@ -29,22 +29,20 @@ CREATE TABLE "property_meta" (
 );
 
 CREATE TABLE "property_image" (
-  "id" SERIAL PRIMARY KEY,
+  "id" serial PRIMARY KEY,
   "property_id" int,
   "path" varchar,
   "is_primary" bool
 );
 
 CREATE TABLE "transaction" (
-  "id" SERIAL PRIMARY KEY,
-  "email" varchar,
-  "property_id" int,
+  "transaction_hash" varchar PRIMARY KEY,
+  "from" varchar,
+  "to" varchar,
   "amount" int,
-  "created_date" date
+  "token" varchar
 );
 
 ALTER TABLE "property" ADD FOREIGN KEY ("seller") REFERENCES "account" ("email");
 ALTER TABLE "property_meta" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
 ALTER TABLE "property_image" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
-ALTER TABLE "transaction" ADD FOREIGN KEY ("email") REFERENCES "account" ("email");
-ALTER TABLE "transaction" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
