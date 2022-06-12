@@ -19,7 +19,6 @@ const SignupForm = (props) => {
   const onConnect = props.onConnect;
   const onSubmit = props.onSubmit;
   const walletAddress = props.walletAddress || "";
-  const isConnected = props.isConnected || false;
 
   useEffect(() => {
     updateCanSubmit();
@@ -27,10 +26,7 @@ const SignupForm = (props) => {
 
   const updateCanSubmit = () => {
     setCanSubmit(
-      fullname !== "" &&
-        email !== "" &&
-        password !== "" &&
-        walletAddress !== ""
+      fullname !== "" && email !== "" && password !== "" && walletAddress !== ""
     );
   };
 
@@ -71,7 +67,7 @@ const SignupForm = (props) => {
         <h3>Wallet information</h3>
         <div className="m-2 justify-between items-center flex flex-row">
           <div>Wallet address:</div>
-          { isConnected ? (
+          {walletAddress !== "" ? (
             <div>{walletAddress}</div>
           ) : (
             <div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { message as AntMessage } from "antd";
 import { sha256 } from "js-sha256";
 import { useNavigate } from "react-router";
-import { connectMetamask, getAccounts, isConnected } from "utils/metamask.js";
+import { connectMetamask, getAccounts } from "utils/metamask.js";
 import * as account from "services/account.js";
 import SignupForm from "components/SignupForm";
 
@@ -74,7 +74,6 @@ const SignupPage = () => {
       onConnect={onConnect}
       onSubmit={onSubmit}
       walletAddress={walletAddress}
-      isConnected={isConnected()}
     />
   );
 };

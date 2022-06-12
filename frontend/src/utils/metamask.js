@@ -1,24 +1,29 @@
-import config from "utils/config.js"
-import { ethers } from "ethers";
+import * as config from "utils/config.js"
 
-const provider = new ethers.providers.Web3Provider(window.ethereum)
+export const ethereum = window.ethereum;
+
+export const switchNetwork = () => {
+    ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [config.blockchain.aurora.mainnet]
+    });
+}
 
 export const connectMetamask = async () => {
-    if (!window.ethereum) {
+    if (!ethereum) {
         alert("Please install metamask extension!")
         return;
     }
-    await provider.send("eth_requestAccounts", []);
-
+    return await ethereum.send("eth_requestAccounts", []);
 }
 
 export const getAccounts = async () => {
-    const accounts = await window.ethereum.request({
+    const accounts = await ethereum.request({
         method: 'eth_accounts',
     })
     return accounts[0]
 }
 
-export const isConnected = () => {
-    return window.ethereum.isConnected();
+export const isConnected = async () => {
+    return await ethereum.isConnected();
 }

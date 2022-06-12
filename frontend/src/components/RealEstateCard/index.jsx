@@ -20,7 +20,13 @@ const RealEstateCard = (props) => {
       </div>
       <div className="items-center p-2 flex flex-row justify-between">
         <div>
-          <h3 className="m-0 text-left text-green-600">{status}</h3>
+          {status === "selling" ? (
+            <h3 className="m-0 text-left text-sky-600">Selling</h3>
+          ) : status === "sold" ? (
+            <h3 className="m-0 text-left text-green-600">Sold</h3>
+          ) : (
+            <h3 className="m-0 text-left text-yellow-600">Upcoming</h3>
+          )}
           <h3 className="m-0 text-left">{location}</h3>
         </div>
         <div className="p-2 bg-gray-600 text-white rounded w-fit">
