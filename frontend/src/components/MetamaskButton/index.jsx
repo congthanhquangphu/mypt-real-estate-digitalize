@@ -15,6 +15,7 @@ const MetamaskButton = ({ className }) => {
           type="primary"
           style={{ backgroundColor: "green" }}
           shape="round"
+          size="large"
           icon={<ApiOutlined />}
           onClick={connectWallet}
         >
@@ -23,7 +24,9 @@ const MetamaskButton = ({ className }) => {
       ) : (
         <Button
           className={className}
-          type="ghost"
+          style={{ backgroundColor: "green" }}
+          type="primary"
+          size="large"
           shape="round"
           icon={<WalletOutlined />}
         >
