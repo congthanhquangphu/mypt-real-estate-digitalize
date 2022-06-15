@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { message as AntMessage } from "antd";
 import { sha256 } from "js-sha256";
 import { useNavigate } from "react-router";
-import { connectMetamask, getAccounts } from "utils/metamask.js";
 import * as account from "services/account.js";
 import SignupForm from "components/SignupForm";
+import { MetamaskProvider } from "context/MetamaskProvider";
 
 const SignupPage = () => {
   const navigator = useNavigate();
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [walletAddress, setWalletAddress] = useState();
 
-  useEffect(() => {
-    refreshData();
-  });
+  const { currentAccount } = useContext(MetamaskProvider);
 
   const onFullnameChange = (e) => {
     setFullname(e.target.value);
@@ -29,21 +26,12 @@ const SignupPage = () => {
     setPassword(e.target.value);
   };
 
-  const refreshData = async () => {
-    setWalletAddress(await getAccounts());
-  };
-
-  const onConnect = () => {
-    connectMetamask();
-    refreshData();
-  };
-
   const onSubmit = () => {
     const data = {
       fullname: fullname,
       email: email,
       password: sha256(password),
-      wallet_address: walletAddress,
+      wallet_address: currentAccount,
     };
     account.signup(data, (err, res) => {
       if (err) {
@@ -71,9 +59,7 @@ const SignupPage = () => {
       onEmailChange={onEmailChange}
       password={password}
       onPasswordChange={onPasswordChange}
-      onConnect={onConnect}
       onSubmit={onSubmit}
-      walletAddress={walletAddress}
     />
   );
 };

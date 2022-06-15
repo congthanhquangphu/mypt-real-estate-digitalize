@@ -1,14 +1,29 @@
+* {
+  font-size: 1rem;
+}
+
 h1 {
   font-size: 2rem;
 }
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
 }
 h3 {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .avatar {
   border-radius: 0.5;
   width: 128px;
+}
+
+.gradient-bg {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    135deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(144, 180, 255, 1) 0%,
+    rgba(125, 217, 255, 1) 37%,
+    rgba(179, 242, 255, 1) 100%
+  );
 }

@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import defaultRealEstate from "res/default_real_estate.jpg";
 
-const RealEstateCard = (props) => {
+const EstateCard = (props) => {
+  const id = props.id;
   const title = props.title || "";
   const image = props.image || defaultRealEstate;
   const status = props.status || "";
@@ -12,9 +14,15 @@ const RealEstateCard = (props) => {
   const currentInvestors = props.currentInvestors || 0;
   const currentParts = props.currentParts || 0;
 
+  const navigator = useNavigate();
+
+  const onClickCard = () => {
+    navigator(`/real_estate/${id}`);
+  }
+
   return (
-    <button className="w-fit p-5 rounded-xl bg-white m-2">
-      <h2>{title}</h2>
+    <button className="w-fit p-5 rounded-xl bg-white m-2" onClick={onClickCard} >
+      {/* <h2>{title}</h2>
       <div className="justify-center flex flex-row">
         <img alt="real_estate" src={image} className="w-[256px] rounded-xl" />
       </div>
@@ -47,9 +55,9 @@ const RealEstateCard = (props) => {
       <div className="rounded-xl bg-gray-300 w-[100%] h-6">
         <div className="rounded-xl bg-yellow-600 w-[20%] h-6" />
         <div className="-mt-[24px] relative">{currentParts}/1000</div>
-      </div>
+      </div> */}
     </button>
   );
 };
 
-export default RealEstateCard;
+export default EstateCard;

@@ -1,0 +1,43 @@
+CREATE TABLE "property" (
+  "id" serial PRIMARY KEY,
+  "title" varchar,
+  "ipfs_cid" varchar,
+  "approval" bool,
+  "description" text,
+  "location" varchar,
+  "land_area" int,
+  "construct_area" int,
+  "profit" real
+);
+
+CREATE TABLE "property_image" (
+  "id" serial PRIMARY KEY,
+  "property_id" int,
+  "path" varchar,
+  "is_primary" bool
+);
+
+CREATE TABLE "token" (
+  "token_id" int PRIMARY KEY,
+  "property_id" int
+);
+
+CREATE TABLE "item" (
+  "id" serial PRIMARY KEY,
+  "token_id" int,
+  "selling_type" varchar,
+  "seller_address" varchar
+);
+
+CREATE TABLE "transaction" (
+  "transaction_hash" varchar PRIMARY KEY,
+  "from" varchar,
+  "to" varchar,
+  "amount" int,
+  "token" varchar,
+  "created_timestamp" timestamp
+);
+
+ALTER TABLE "property_image" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
+ALTER TABLE "token" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
+ALTER TABLE "item" ADD FOREIGN KEY ("token_id") REFERENCES "token" ("token_id");

@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+
+import React from "react";
 
 const HomePage = () => {
+
   return (
-    <>
-      <div>
-        Home page
-      </div>
-    </>
+    <div>
+      Home Page
+    </div>
   );
 };
 

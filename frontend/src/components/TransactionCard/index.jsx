@@ -1,16 +1,23 @@
 import React from "react";
+import { ReloadOutlined } from "@ant-design/icons";
+import "./style.css";
 
 const TransactionCard = (props) => {
   const transactions = props.transactions || [];
 
   return (
-    <div className="p-5 m-2 bg-white flex flex-col rounded-xl">
+    <div className="p-5 m-2 bg-white flex flex-col rounded-xl w-full max-h-screen">
       <div>
-        <h1>Transaction</h1>
+        <div className="flex flex-row justify-between">
+          <h1>Transaction</h1>
+          <button>
+            <ReloadOutlined />
+          </button>
+        </div>
         <hr className="p-2" />
       </div>
-      <div className="overflow-x-scroll">
-        <table>
+      <div className="overflow-x-scroll w-full h-full">
+        <table className="table-auto w-full h-full">
           <thead>
             <tr>
               <th>Transaction hash</th>

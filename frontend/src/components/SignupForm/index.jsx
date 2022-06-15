@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Input } from "antd";
+import { MetamaskProvider } from "context/MetamaskProvider";
 import {
   UserOutlined,
   MailOutlined,
@@ -9,6 +10,7 @@ import {
 
 const SignupForm = (props) => {
   const [canSubmit, setCanSubmit] = useState(false);
+  const { connectWallet, currentAccount } = useContext(MetamaskProvider);
 
   const fullname = props.fullname || "";
   const onFullnameChange = props.onFullnameChange || "";
@@ -16,17 +18,15 @@ const SignupForm = (props) => {
   const onEmailChange = props.onEmailChange || "";
   const password = props.password || "";
   const onPasswordChange = props.onPasswordChange || "";
-  const onConnect = props.onConnect;
   const onSubmit = props.onSubmit;
-  const walletAddress = props.walletAddress || "";
 
   useEffect(() => {
     updateCanSubmit();
-  }, [fullname, email, password, walletAddress]);
+  }, [fullname, email, password, currentAccount]);
 
   const updateCanSubmit = () => {
     setCanSubmit(
-      fullname !== "" && email !== "" && password !== "" && walletAddress !== ""
+      fullname !== "" && email !== "" && password !== "" && currentAccount !== ""
     );
   };
 
@@ -67,8 +67,8 @@ const SignupForm = (props) => {
         <h3>Wallet information</h3>
         <div className="m-2 justify-between items-center flex flex-row">
           <div>Wallet address:</div>
-          {walletAddress !== "" ? (
-            <div>{walletAddress}</div>
+          {currentAccount !== "" ? (
+            <div>{currentAccount}</div>
           ) : (
             <div>
               <Button
@@ -77,7 +77,7 @@ const SignupForm = (props) => {
                 style={{ backgroundColor: "green" }}
                 shape="round"
                 icon={<ApiOutlined />}
-                onClick={onConnect}
+                onClick={connectWallet}
               >
                 Connect to Metamask
               </Button>

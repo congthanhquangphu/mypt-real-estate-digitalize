@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   UserOutlined,
   LoginOutlined,
@@ -6,9 +6,18 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
+import { MetamaskProvider, MetamaskContext } from "context/MetamaskProvider";
+import { ApiOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
+import MetamaskButton from "components/MetamaskButton";
 
-const menuItem = ["Home", "Real estate", "About us"].map((key) => ({
+const menuItem = [
+  "Home",
+  "User",
+  "Marketplace",
+  "Estate registry",
+  "About us",
+].map((key) => ({
   key: key.replace(" ", "_").toLowerCase(),
   label: key,
 }));
@@ -16,10 +25,10 @@ const menuItem = ["Home", "Real estate", "About us"].map((key) => ({
 const Header = () => {
   let navigate = useNavigate();
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
+  // const logout = () => {
+  //   localStorage.removeItem("token");
+  //   navigate("/");
+  // };
 
   return (
     <header className="flex justify-between flex-row items-center">
@@ -31,7 +40,7 @@ const Header = () => {
           onClick={(item) => navigate(`/${item.key}`)}
         />
       </div>
-      {localStorage.token == null ? (
+      {/* {localStorage.token == null ? (
         <div className="p-2 flex flex-row">
           <Button
             className="m-2"
@@ -75,7 +84,8 @@ const Header = () => {
             Logout
           </Button>
         </div>
-      )}
+      )} */}
+      <MetamaskButton className="m-2"/>
     </header>
   );
 };
