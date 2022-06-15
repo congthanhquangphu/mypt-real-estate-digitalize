@@ -4,7 +4,7 @@ import { MetamaskContext } from "context/MetamaskProvider";
 import MetamaskButton from "components/MetamaskButton";
 
 const AccountCard = (props) => {
-  const { currentAccount, currentBalance } =
+  const { currentAccount, currentBalance, currentUtilityBalance, utilityTokenSymbol } =
     useContext(MetamaskContext);
 
   return (
@@ -24,9 +24,9 @@ const AccountCard = (props) => {
           </div>
         )}
       </div>
-      <div className="rounded-xl p-5 w-full bg-gray-200 mt-2 text-right">
+      <div className="rounded-xl p-5 w-full bg-gray-200 mt-2 text-right ">
         <h2>{currentBalance} ETH</h2>
-        <h2>{0} REUT</h2>
+        <h2>{currentUtilityBalance} {utilityTokenSymbol}</h2>
       </div>
     </div>
   );

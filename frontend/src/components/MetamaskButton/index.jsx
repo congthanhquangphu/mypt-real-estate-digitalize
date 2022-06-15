@@ -3,7 +3,7 @@ import { MetamaskContext } from "context/MetamaskProvider";
 import { ApiOutlined } from "@ant-design/icons";
 import { WalletOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { shortenAddress } from "utils/shorten_address";
+import { shortenAddress } from "utils/utils";
 
 const MetamaskButton = ({ className }) => {
   const { connectWallet, currentAccount } = useContext(MetamaskContext);

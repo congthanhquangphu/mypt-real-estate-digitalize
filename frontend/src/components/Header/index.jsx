@@ -6,23 +6,34 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import { Button, Menu } from "antd";
-import { MetamaskProvider, MetamaskContext } from "context/MetamaskProvider";
-import { ApiOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router";
 import MetamaskButton from "components/MetamaskButton";
 
-const menuItem = [
-  "Home",
-  "User",
-  "Marketplace",
-  "Estate registry",
-  "About us",
-].map((key) => ({
-  key: key.replace(" ", "_").toLowerCase(),
-  label: key,
-}));
+const getItem = (label, key, icon, children, theme) => {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    theme,
+  };
+};
 
-const Header = () => {
+const menuItem = [
+  getItem("Home", "home"),
+  getItem("User", "user"),
+  getItem("Marketplace", "marketplace", null, [
+    getItem("Listing", "listing"),
+    getItem("Crowdfunding", "crowdfunding"),
+    getItem("Bidding", "bidding"),
+    getItem("Swap", "swap"),
+  ]),
+  getItem("Estate registry", "estate_registry"),
+  getItem("Token", "token"),
+  getItem("About us", "about_us"),
+];
+
+const Header = ({className}) => {
   let navigate = useNavigate();
 
   // const logout = () => {
@@ -31,12 +42,13 @@ const Header = () => {
   // };
 
   return (
-    <header className="flex justify-between flex-row items-center">
+    <header className={className}>
       <div className="mt-5 w-full">
         <Menu
           mode="horizontal"
           defaultSelectedKeys={["home"]}
           items={menuItem}
+          theme="dark"
           onClick={(item) => navigate(`/${item.key}`)}
         />
       </div>
@@ -85,7 +97,7 @@ const Header = () => {
           </Button>
         </div>
       )} */}
-      <MetamaskButton className="m-2"/>
+      <MetamaskButton className="m-2" />
     </header>
   );
 };

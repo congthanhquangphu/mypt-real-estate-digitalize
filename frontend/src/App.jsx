@@ -13,30 +13,51 @@ import { MetamaskProvider } from "context/MetamaskProvider";
 import UserPage from "pages/UserPage";
 import MarketplacePage from "pages/MarketplacePage";
 import EstateRegistryPage from "pages/EstateRegistryPage";
+import TokenPage from "pages/TokenPage";
 
 function App() {
   return (
     <MetamaskProvider>
-      <div className="h-screen overflow-x-scroll">
-        <Router>
-          <Header />
-          <div className="gradient-bg min-h-full p-5">
+      <Router>
+        <div className="h-screen overflow-x-scroll">
+          <Header className="flex ant-menu ant-menu-dark justify-between flex-row items-center min-h-[5%]" />
+          <div className="gradient-bg min-h-[90%] p-5">
             <Routes>
               <Route path="/" exact element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/user" element={<UserPage />} />
+
               {/* <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} /> */}
-              <Route path="/marketplace" element={<MarketplacePage />} />
+
+              <Route
+                path="/listing"
+                element={<MarketplacePage sellType="listing" />}
+              />
+              <Route
+                path="/crowdfunding"
+                element={<MarketplacePage sellType="crowdfunding" />}
+              />
+              <Route
+                path="/bidding"
+                element={<MarketplacePage sellType="bidding" />}
+              />
+              <Route
+                path="/swap"
+                element={<MarketplacePage sellType="Swap" />}
+              />
+
+              <Route path="/token" element={<TokenPage />} />
               <Route path="/estate/:id" element={<EstateDetailPage />} />
               <Route path="/estate_registry" element={<EstateRegistryPage />} />
+
               <Route path="/about_us" element={<AboutUsPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
-          <Footer />
-        </Router>
-      </div>
+          <Footer className="flex justify-center px-4 text-gray-100 bg-black min-h-[5%]" />
+        </div>
+      </Router>
     </MetamaskProvider>
   );
 }

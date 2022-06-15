@@ -30,6 +30,12 @@ const getUtilityContract = () => {
 export const MetamaskProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [currentBalance, setCurrentBalance] = useState(0);
+  const [currentUtilityBalance, setCurrentUtilityBalance] = useState(0);
+  const [utilityTokenSymbol, setCurrentUtilitySymbol] = useState("");
+
+  ethereum.on("accountsChanged", async () => {
+    checkWalletConnected();
+  });
 
   const assertMetamask = () => {
     if (!ethereum) {
@@ -37,12 +43,21 @@ export const MetamaskProvider = ({ children }) => {
     }
   };
 
+  const resetData = () => {
+    setCurrentAccount("");
+    setCurrentBalance(0);
+    setCurrentUtilityBalance(0);
+    setCurrentUtilitySymbol("");
+  };
+
   const checkWalletConnected = async () => {
     try {
       assertMetamask();
+      resetData();
       const accounts = await ethereum.request({
         method: "eth_accounts",
       });
+
       if (!accounts.length) return;
 
       let account = accounts[0];
@@ -51,6 +66,13 @@ export const MetamaskProvider = ({ children }) => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const balance = await provider.getBalance(account);
       setCurrentBalance(ethers.utils.formatEther(balance));
+
+      const utilityContract = getUtilityContract();
+      const utilityBalance = await utilityContract.balanceOf(account);
+      setCurrentUtilityBalance(ethers.utils.formatEther(utilityBalance));
+
+      const symbol = await utilityContract.symbol();
+      setCurrentUtilitySymbol(symbol);
     } catch (err) {
       alert(err);
     }
@@ -81,6 +103,8 @@ export const MetamaskProvider = ({ children }) => {
         switchNetwork,
         currentAccount,
         currentBalance,
+        currentUtilityBalance,
+        utilityTokenSymbol,
       }}
     >
       {children}

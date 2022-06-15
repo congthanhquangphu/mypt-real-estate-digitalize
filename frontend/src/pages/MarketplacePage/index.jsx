@@ -3,13 +3,15 @@ import { Radio, Pagination } from "antd";
 import { useEffect } from "react";
 import EstateCard from "components/EstateCard";
 import * as estate from "services/estate";
+import { capitalizeFirstLetter } from "utils/utils";
 import * as config from "utils/config.js";
 
-const MarketplacePage = () => {
+const MarketplacePage = (props) => {
   const [filterStatus, setFilterStatus] = useState("listing");
   const [listEstate, setListEstate] = useState([]);
   const [page, setPage] = useState(1);
   const [totalEstate, setTotalEstate] = useState(1);
+  const sellType = props.sellType || "";
 
   useEffect(() => {
     // refreshData();
@@ -48,24 +50,9 @@ const MarketplacePage = () => {
 
   return (
     <div className="w-full min-h-screen">
-      <div>
-        <div className="m-2 bg-white w-fit p-4 rounded-xl">
-          <h1>Marketplace</h1>
-          <h3>Selling methods</h3>
-          <Radio.Group
-            value={filterStatus}
-            onChange={onFilterStatusChange}
-            defaultValue="selling"
-            size="large"
-          >
-            <Radio.Button value="listing">Listing</Radio.Button>
-            <Radio.Button value="crowdfunding">Crowdfunding</Radio.Button>
-            <Radio.Button value="bidding">Bidding</Radio.Button>
-            <Radio.Button value="uniswap">Uniswap</Radio.Button>
-          </Radio.Group>
-        </div>
-      </div>  
-      <div className="p-2 m-2 rounded-xl bg-white">
+      <div className="p-4 m-2 rounded-xl bg-white">
+        <h1>{capitalizeFirstLetter(sellType)} marketplace</h1>
+        <hr className="p-2"/>
         <div className="min-h-screen flex flex-wrap justify-center">
           {listEstate.map((item) => {
             return (
