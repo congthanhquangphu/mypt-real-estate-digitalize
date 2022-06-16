@@ -37,6 +37,17 @@ export const blockchain = {
                 decimals: 18
             },
             blockExplorerUrls: ["https://ropsten.etherscan.io"]
+        }, 
+        rinkeby_testnet: {
+            chainId: "0x4",
+            rpcUrls: ["https://rinkeby.infura.io/v3/"],
+            chainName: "Rinkeby test network",
+            nativeCurrency: {
+                name: "ETH",
+                symbol: "ETH",
+                decimals: 18
+            },
+            blockExplorerUrls: ["https://rinkeby.etherscan.io"]
         }
     }
 }
