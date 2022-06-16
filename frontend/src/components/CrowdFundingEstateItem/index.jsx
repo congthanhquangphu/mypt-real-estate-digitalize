@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import defaultRealEstate from "res/default_real_estate.jpg";
 
-const EstateCard = (props) => {
+const CrowdFundingEstateItem = (props) => {
   const id = props.id;
   const title = props.title || "";
   const image = props.image || defaultRealEstate;
@@ -21,8 +21,8 @@ const EstateCard = (props) => {
   }
 
   return (
-    <button className="w-fit p-5 rounded-xl bg-white m-2" onClick={onClickCard} >
-      {/* <h2>{title}</h2>
+    <button className="border border-black-200 p-5 rounded-xl bg-white m-2" onClick={onClickCard} >
+      <h2>{title}</h2>
       <div className="justify-center flex flex-row">
         <img alt="real_estate" src={image} className="w-[256px] rounded-xl" />
       </div>
@@ -55,9 +55,9 @@ const EstateCard = (props) => {
       <div className="rounded-xl bg-gray-300 w-[100%] h-6">
         <div className="rounded-xl bg-yellow-600 w-[20%] h-6" />
         <div className="-mt-[24px] relative">{currentParts}/1000</div>
-      </div> */}
+      </div>
     </button>
   );
 };
 
-export default EstateCard;
+export default CrowdFundingEstateItem;

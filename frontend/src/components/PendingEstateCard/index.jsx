@@ -1,23 +1,34 @@
 import React, { useContext } from "react";
 import { Pagination } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
+import PendingEstateItem from "components/PedingEstateItem";
 
-const PendingEstateCard = () => {
+const PendingEstateCard = ({ className }) => {
   const { currentAccount } = useContext(MetamaskContext);
 
+
   return (
-    <div className="bg-white min-h-full flex flex-col rounded-xl w-full p-4">
+    <div
+      className={`bg-white min-h-full flex flex-col rounded-xl w-fit p-4 ${className}`}
+    >
       <div>
         <h1>Your pending real estates</h1>
         <hr className="m-2" />
       </div>
-      <div className=" flex flex-wrap h-[90%] justify-center">
+      <div className="flex flex-wrap h-[90%]">
         {currentAccount === "" ? (
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center w-full">
             <h2>Please connect your wallet to view estates</h2>
           </div>
         ) : (
-          <h3>Content</h3>
+          <div className="flex flex-row flex-wrap items-center justify-between">
+            <PendingEstateItem title="Hello" />
+            <PendingEstateItem title="Hello" />
+            <PendingEstateItem title="Hello" />
+            <PendingEstateItem title="Hello" />
+            <PendingEstateItem title="Hello" />
+            <PendingEstateItem title="Hello" />
+          </div>
         )}
       </div>
       <div className="p-2 m-2 rounded-xl bg-white">

@@ -6,7 +6,7 @@ import { useForm } from "antd/lib/form/Form";
 const { Dragger } = Upload;
 const { TextArea } = Input;
 
-const EstateRegistryForm = () => {
+const EstateRegistryForm = ({className}) => {
   const onFinish = (data) => {
     console.log(data);
   };
@@ -35,7 +35,7 @@ const EstateRegistryForm = () => {
   };
 
   return (
-    <div className="p-5 bg-white w-full rounded-xl">
+    <div className={`p-5 bg-white w-full rounded-xl ${className}`}>
       <h1>Registry form</h1>
       <hr className="m-2" />
       <Form onFinish={onFinish}>

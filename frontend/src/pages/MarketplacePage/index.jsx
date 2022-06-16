@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Radio, Pagination } from "antd";
 import { useEffect } from "react";
-import EstateCard from "components/EstateCard";
+// import PendingEstateCard from "components/PedingEstateCard";
 import * as estate from "services/estate";
 import { capitalizeFirstLetter } from "utils/utils";
 import * as config from "utils/config.js";
@@ -50,9 +50,9 @@ const MarketplacePage = (props) => {
         <h1>{capitalizeFirstLetter(sellType)} marketplace</h1>
         <hr className="p-2"/>
         <div className="min-h-screen flex flex-wrap justify-center">
-          {listEstate.map((item) => {
+          {/* {listEstate.map((item) => {
             return (
-              <EstateCard
+              <PendingEstateCard
                 key={item.id}
                 id={item.id}
                 title={item.title}
@@ -65,7 +65,7 @@ const MarketplacePage = (props) => {
                 currentParts={item.currentParts}
               />
             );
-          })}
+          })} */}
         </div>
         <Pagination
           className="flex flex-row justify-center m-2"
