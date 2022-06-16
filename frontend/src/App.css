@@ -27,3 +27,11 @@ h3 {
     rgba(179, 242, 255, 1) 100%
   );
 }
+
+.ant-input-number-affix-wrapper {
+  width: 100%;
+}
+
+.ant-row .ant-form-item {
+  margin-bottom: 0;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import AccountCard from "components/AccountCard";
 import TransactionCard from "components/TransactionCard";
-import UtilityTokenCard from "components/UtilityTokenCard";
+import BuyUtilityTokenCard from "components/BuyUtilityTokenCard";
 
 const UserPage = () => {
   const transactions = [];
@@ -18,11 +18,11 @@ const UserPage = () => {
   return (
     <div className="flex flex-col justify-center w-full items-center">
         <div className="flex flex-row w-full">
-          <div className="flex flex-col w-5/12">
-            <AccountCard />
-            <UtilityTokenCard />
+          <div className="flex flex-col w-3/12">
+            <AccountCard className="m-2"/>
+            <BuyUtilityTokenCard className="m-2"/>
           </div>
-          <TransactionCard className="w-7/12" transactions={transactions} />
+          <TransactionCard className="m-2 w-9/12" transactions={transactions} />
         </div>
     </div>
   );

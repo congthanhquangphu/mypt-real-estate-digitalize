@@ -5,14 +5,12 @@ import * as account from "services/account";
 import { useNavigate } from "react-router";
 import AccountCard from "components/AccountCard";
 import ListTransactionsCard from "components/TransactionCard";
-import { TokenProvider } from "context/TokenProvider";
 
 const AccountPage = () => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [wallet, setWallet] = useState("");
   const navigator = useNavigate();
-  // const toek =
 
   useEffect(() => {
     refreshData();
@@ -55,11 +53,9 @@ const AccountPage = () => {
 
   return (
     <div className="h-[80vh]">
-      <div className="flex max-h-[80%] flex-row p-2">
-        <TokenProvider>
-          <AccountCard />
-          <ListTransactionsCard transactions={transactions} />
-        </TokenProvider>
+      <div className="flex max-h-[80%] flex-row">
+        <AccountCard />
+        <ListTransactionsCard transactions={transactions} />
       </div>
     </div>
   );

@@ -40,10 +40,6 @@ const MarketplacePage = (props) => {
     });
   };
 
-  const onFilterStatusChange = (e) => {
-    setFilterStatus(e.target.value);
-  };
-
   const onPageChange = (e) => {
     setPage(e);
   };

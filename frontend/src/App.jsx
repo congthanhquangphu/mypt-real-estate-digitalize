@@ -21,7 +21,7 @@ function App() {
       <Router>
         <div className="h-screen overflow-x-scroll">
           <Header className="flex ant-menu ant-menu-dark justify-between flex-row items-center min-h-[5%]" />
-          <div className="gradient-bg min-h-[90%] p-5">
+          <div className="gradient-bg min-h-[90%] p-4">
             <Routes>
               <Route path="/" exact element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />

@@ -3,12 +3,12 @@ import defaultAvatar from "res/default_avatar.png";
 import { MetamaskContext } from "context/MetamaskProvider";
 import MetamaskButton from "components/MetamaskButton";
 
-const AccountCard = (props) => {
+const AccountCard = ({className}) => {
   const { currentAccount, currentBalance, currentUtilityBalance, utilityTokenSymbol } =
     useContext(MetamaskContext);
 
   return (
-    <div className="m-2 p-5 bg-white rounded-xl">
+    <div className={`p-5 bg-white rounded-xl ${className}`}>
       <h1>User information</h1>
       <hr className="p-2" />
       <div className="flex justify-center m-2">

@@ -30,7 +30,7 @@ const menuItem = [
   ]),
   getItem("Estate registry", "estate_registry"),
   getItem("Token", "token"),
-  getItem("About us", "about_us"),
+  // getItem("About us", "about_us"),
 ];
 
 const Header = ({className}) => {

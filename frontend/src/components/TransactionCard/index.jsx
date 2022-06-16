@@ -4,9 +4,10 @@ import "./style.css";
 
 const TransactionCard = (props) => {
   const transactions = props.transactions || [];
+  const className = props.className || "";
 
   return (
-    <div className="p-5 m-2 bg-white flex flex-col rounded-xl w-full max-h-screen">
+    <div className={`p-5 bg-white flex flex-col rounded-xl w-full ${className}`}>
       <div>
         <div className="flex flex-row justify-between">
           <h1>Transaction</h1>

@@ -75,28 +75,25 @@ export const MetamaskProvider = ({ children }) => {
       if (!accounts.length) return;
 
       const account = accounts[0];
-      await setCurrentAccount(account);
-      updateBalance(account);
-      updateUtilityBalance(account);
-      updateUtilitySymbol();
+      setCurrentAccount(account);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const updateUtilityBalance = async (account) => {
+  const updateUtilityBalance = async () => {
     try {
       const utilityContract = getUtilityContract();
-      const utilityBalance = await utilityContract.balanceOf(account);
+      const utilityBalance = await utilityContract.balanceOf(currentAccount);
       setCurrentUtilityBalance(ethers.utils.formatEther(utilityBalance));
     } catch (err) {
       console.log(err);
     }
   };
 
-  const updateBalance = async (account) => {
+  const updateBalance = async () => {
     try {
-      const balance = await provider.getBalance(account);
+      const balance = await provider.getBalance(currentAccount);
       setCurrentBalance(ethers.utils.formatEther(balance));
     } catch (err) {
       console.log(err);
@@ -148,6 +145,12 @@ export const MetamaskProvider = ({ children }) => {
     checkWalletConnected();
     updateUtilitySymbol();
   }, []);
+
+  useEffect(() => {
+    updateBalance();
+    updateUtilityBalance();
+    updateUtilitySymbol();
+  }, [currentAccount])
 
   return (
     <MetamaskContext.Provider
