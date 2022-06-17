@@ -37,7 +37,7 @@ export const blockchain = {
                 decimals: 18
             },
             blockExplorerUrls: ["https://ropsten.etherscan.io"]
-        }, 
+        },
         rinkeby_testnet: {
             chainId: "0x4",
             rpcUrls: ["https://rinkeby.infura.io/v3/"],
@@ -53,16 +53,17 @@ export const blockchain = {
 }
 
 export const constant = {
-    item_per_page: 10
+    item_per_page_marketplace: 10,
+    item_per_page_registry: 6
 }
 
 export const contract = {
     utilityContract: {
         abi: utility_token.abi,
-        address: '0x271b699057eFF00f9dd404B174Ca1cE2249474a2'
+        address: '0x9809d9D94b0B3380db38b1e1a06047a2964e0041'
     },
     crowdsaleContract: {
         abi: crowdsale_token.abi,
-        address: '0x29dfAaDEB6fF24F1C480a3102b63F9daCC204b27'
+        address: '0xa1d3a7778d7B2DF95D0485039bB875268f16541A'
     }
 }

@@ -15,6 +15,7 @@ const UserPage = () => {
       token: "ETH",
     });
   }
+  
   return (
     <div className="flex flex-col justify-center w-full items-center">
         <div className="flex flex-row w-full">

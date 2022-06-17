@@ -27,15 +27,18 @@ const registry = (data, resultCallback) => {
 }
 
 const getCount = (data, resultCallback) => {
-    const status = data.status;
+    const uploader_address = data.uploader_address;
+    const approval = data.approval;
 
     db.pool.query(`
         SELECT count(*) 
         FROM PROPERTY
-        WHERE status=$1`, [
-        status
+        WHERE uploader_address=$1
+        AND approval=$2`, [
+        uploader_address, approval
     ], (err, res) => {
         if (err) {
+            console.log(err)
             resultCallback(err, null);
             return;
         }
@@ -44,20 +47,19 @@ const getCount = (data, resultCallback) => {
 }
 
 const getList = (data, resultCallback) => {
-    const status = data.status;
+    const uploader_address = data.uploader_address;
+    const approval = data.approval;
     const offset = data.offset;
     const limit = data.limit;
-    console.log(status)
 
     db.pool.query(`
         SELECT * 
         FROM PROPERTY p
-        LEFT JOIN PROPERTY_META m
-        ON p.id = m.property_id
-        WHERE p.status=$1
-        OFFSET $2
-        LIMIT $3`, [
-        status, offset, limit
+        WHERE uploader_address=$1
+        AND approval=$2
+        OFFSET $3
+        LIMIT $4`, [
+        uploader_address, approval, offset, limit
     ], (err, res) => {
         if (err) {
             resultCallback(err, null);

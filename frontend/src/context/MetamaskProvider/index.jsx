@@ -24,17 +24,19 @@ export const MetamaskProvider = ({ children }) => {
     return contract;
   };
 
-  const getCrowdsaleContract = () => {
+  const getCrowdsaleContract = (isView = true) => {
     return getContract(
       config.contract.crowdsaleContract.address,
-      config.contract.crowdsaleContract.abi
+      config.contract.crowdsaleContract.abi,
+      isView
     );
   };
 
-  const getUtilityContract = () => {
+  const getUtilityContract = (isView = true) => {
     return getContract(
       config.contract.utilityContract.address,
-      config.contract.utilityContract.abi
+      config.contract.utilityContract.abi,
+      isView
     );
   };
 
@@ -110,12 +112,54 @@ export const MetamaskProvider = ({ children }) => {
     }
   };
 
+  const getUtilityPrice = async (amount) => {
+    try {
+      const rate = await getUtilityRate();
+      const price = (amount * 1.0) / rate;
+      return price;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const buyUtilityToken = async (receiver, deposit) => {
+    try {
+      const crowdsaleContract = await getCrowdsaleContract(false);
+      const transaction = await crowdsaleContract.buyTokens(receiver, {
+        value: ethers.utils.parseEther(deposit.toString()),
+      });
+      return await transaction.wait();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const withdrawUtilityToken = async (receiver) => {
+    try {
+      const crowdsaleContract = await getCrowdsaleContract(false);
+      const transaction = await crowdsaleContract.withdrawTokens(receiver);
+      return await transaction.wait();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getUtilityRate = async () => {
+    try {
+      const crowdsaleContract = getCrowdsaleContract();
+      const rate = await crowdsaleContract.rate();
+      return ethers.utils.formatEther(rate) * Math.pow(10, 18);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const connectWallet = async () => {
     await ethereum.request({
       method: "eth_requestAccounts",
     });
 
-    const selectedNetwork = config.blockchain.ethereum.rinkeby_testnet;
+    const selectedNetwork = config.blockchain.aurora.testnet;
     if (ethereum.networkVersion !== selectedNetwork.chainId) {
       try {
         await switchNetwork(selectedNetwork);
@@ -150,13 +194,17 @@ export const MetamaskProvider = ({ children }) => {
     updateBalance();
     updateUtilityBalance();
     updateUtilitySymbol();
-  }, [currentAccount])
+  }, [currentAccount]);
 
   return (
     <MetamaskContext.Provider
       value={{
         connectWallet,
         switchNetwork,
+        buyUtilityToken,
+        getUtilityPrice,
+        getUtilityRate,
+        withdrawUtilityToken,
         currentAccount,
         currentBalance,
         currentUtilityBalance,

@@ -28,7 +28,8 @@ const registry = (req, res) => {
 
 const getCount = (req, res) => {
     data = {
-        status: req.body.filter || ""
+        uploader_address: req.body.uploader_address || "",
+        approval: req.body.approval || "*"
     }
     Estate.getCount(data, (err, result) => {
         if (err) {
@@ -47,7 +48,8 @@ const getCount = (req, res) => {
 
 const getList = (req, res) => {
     data = {
-        status: req.body.filter || "    ",
+        uploader_address: req.body.uploader_address || "",
+        status: req.body.filter || "*",
         limit: req.body.limit,
         offset: req.body.offset,
     }

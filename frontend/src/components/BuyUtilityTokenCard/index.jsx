@@ -3,11 +3,20 @@ import { Button, Form, Input, InputNumber } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
 import { useForm } from "antd/lib/form/Form";
 import { existEmpty } from "utils/utils";
+import "ethers";
 
 const BuyUtilityTokenCard = ({ className }) => {
-  const { utilityTokenSymbol, currentAccount } = useContext(MetamaskContext);
+  const {
+    buyUtilityToken,
+    utilityTokenSymbol,
+    getUtilityRate,
+    currentAccount,
+    getUtilityPrice,
+    withdrawUtilityToken,
+  } = useContext(MetamaskContext);
   const [form] = useForm();
   const [estimatePrice, setEstimatePrice] = useState(0);
+  const [utilityRate, setUtilityRate] = useState(0);
   const [canSubmit, setCanSubmit] = useState(false);
 
   const updateSubmit = () => {
@@ -19,21 +28,38 @@ const BuyUtilityTokenCard = ({ className }) => {
     setCanSubmit(true);
   };
 
-  const updateEstimatePrice = () => {
-
-  }
+  const updateEstimatePrice = async () => {
+    const object = form.getFieldsValue();
+    const amount = object.amount;
+    if (parseInt(amount)) {
+      setEstimatePrice(await getUtilityPrice(amount));
+    }
+  };
 
   const onFieldsChange = () => {
-    updateEstimatePrice()
+    updateEstimatePrice();
     updateSubmit();
-  }
+  };
+
+  const updateRate = async () => {
+    const rate = await getUtilityRate();
+    setUtilityRate(rate);
+  };
+
+  const handleWithdraw = async () => {
+    withdrawUtilityToken(currentAccount);
+  };
 
   useEffect(() => {
+    updateRate();
     updateSubmit();
   }, []);
 
-  const submitForm = (data) => {
-    console.log(data);
+  const submitForm = async (data) => {
+    const object = data;
+    const receiver = object.receiver;
+
+    await buyUtilityToken(receiver, estimatePrice);
   };
 
   return (
@@ -58,7 +84,12 @@ const BuyUtilityTokenCard = ({ className }) => {
                 placeholder="0"
               />
             </Form.Item>
-            <b>Estimated price:</b> {estimatePrice} ETH
+            <div>
+              <b>Rate:</b> 1 ETH / {utilityRate} {utilityTokenSymbol}
+            </div>
+            <div>
+              <b>Estimated price:</b> {estimatePrice} ETH
+            </div>
           </div>
           <div className="my-2">
             <Form.Item>
@@ -73,6 +104,18 @@ const BuyUtilityTokenCard = ({ className }) => {
                 Buy
               </Button>
             </Form.Item>
+          </div>
+          <div className="my-2">
+            <Button
+              type="primary"
+              size="large"
+              shape="round"
+              disabled={currentAccount === ""}
+              onClick={handleWithdraw}
+              className="center w-full"
+            >
+              Withdraw
+            </Button>
           </div>
         </div>
       </Form>
