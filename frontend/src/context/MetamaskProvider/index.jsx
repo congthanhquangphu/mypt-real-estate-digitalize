@@ -131,6 +131,7 @@ export const MetamaskProvider = ({ children }) => {
       return await transaction.wait();
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 

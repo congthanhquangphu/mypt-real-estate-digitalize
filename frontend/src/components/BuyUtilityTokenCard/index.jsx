@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Form, Input, InputNumber, message as AntMessage } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
 import { useForm } from "antd/lib/form/Form";
 import { existEmpty } from "utils/utils";
@@ -14,18 +14,21 @@ const BuyUtilityTokenCard = ({ className }) => {
     getUtilityPrice,
     withdrawUtilityToken,
   } = useContext(MetamaskContext);
+
   const [form] = useForm();
   const [estimatePrice, setEstimatePrice] = useState(0);
   const [utilityRate, setUtilityRate] = useState(0);
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [canBuy, setCanBuy] = useState(false);
+  const [isBuyLoading, setIsBuyLoading] = useState(false);
+  const [isWithdrawLoading, setIsWithdrawLoading] = useState(false);
 
   const updateSubmit = () => {
     const object = form.getFieldsValue();
     if (existEmpty(object) || currentAccount === "") {
-      setCanSubmit(false);
+      setCanBuy(false);
       return;
     }
-    setCanSubmit(true);
+    setCanBuy(true);
   };
 
   const updateEstimatePrice = async () => {
@@ -47,20 +50,39 @@ const BuyUtilityTokenCard = ({ className }) => {
   };
 
   const handleWithdraw = async () => {
-    withdrawUtilityToken(currentAccount);
+    try {
+      setIsWithdrawLoading(true);
+      await withdrawUtilityToken(currentAccount);
+      setIsWithdrawLoading(false);
+      AntMessage.success("Withdraw successfully");
+
+      window.location.reload();
+    } catch (err) {
+      AntMessage.error("Withdraw failed");
+    }
+  };
+
+  const submitForm = async (data) => {
+    try {
+      const object = data;
+      const receiver = object.receiver;
+
+      setIsBuyLoading(true);
+      form.resetFields();
+      updateSubmit();
+
+      await buyUtilityToken(receiver, estimatePrice);
+      setIsBuyLoading(false);
+      AntMessage.success("Buy successfully");
+    } catch (err) {
+      AntMessage.error("Buy failed");
+    }
   };
 
   useEffect(() => {
     updateRate();
     updateSubmit();
   }, []);
-
-  const submitForm = async (data) => {
-    const object = data;
-    const receiver = object.receiver;
-
-    await buyUtilityToken(receiver, estimatePrice);
-  };
 
   return (
     <div className={`p-4 bg-white rounded-xl ${className}`}>
@@ -97,9 +119,10 @@ const BuyUtilityTokenCard = ({ className }) => {
                 type="primary"
                 size="large"
                 shape="round"
-                disabled={!canSubmit}
+                disabled={!canBuy}
                 className="center w-full"
                 htmlType="submit"
+                loading={isBuyLoading}
               >
                 Buy
               </Button>
@@ -109,6 +132,7 @@ const BuyUtilityTokenCard = ({ className }) => {
             <Button
               type="primary"
               size="large"
+              loading={isWithdrawLoading}
               shape="round"
               disabled={currentAccount === ""}
               onClick={handleWithdraw}

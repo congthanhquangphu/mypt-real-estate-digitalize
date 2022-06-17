@@ -43,6 +43,7 @@ const EstateRegistryForm = ({ className }) => {
       }
       AntMessage.success("Registry successful");
       form.resetFields();
+      window.location.reload();
     });
   };
 

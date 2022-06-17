@@ -1,6 +1,6 @@
 import EstateRegistryForm from "components/EstateRegistryForm";
 import RegisteredEstateCard from "components/RegisteredEstateCard";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const EstateRegistryPage = () => {
 
