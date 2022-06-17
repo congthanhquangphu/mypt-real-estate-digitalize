@@ -9,13 +9,13 @@ const BasicEstateItem = (props) => {
   const image = props.image || defaultRealEstate;
   const location = props.location || "";
   const profit = props.profit || 0;
-  const status = props.status || "pending";
+  const approval = props.approval || "pending";
   const className = props.className || "";
 
   const navigator = useNavigate();
 
   const onClickCard = () => {
-    navigator(`/real_estate/${id}`);
+    navigator(`/estate/${id}`);
   };
 
   return (
@@ -30,12 +30,12 @@ const BasicEstateItem = (props) => {
       <hr className="my-2" />
       <div className="grid p-2 text-left gap-x-2 grid-cols-2">
         <b>Approval:</b>
-        {status === "pending" ? (
-          <div className="text-amber-600">{capitalizeFirstLetter(status)}</div>
-        ) : status === "approved" ? (
-          <div className="text-green-600">{capitalizeFirstLetter(status)}</div>
+        {approval === "pending" ? (
+          <div className="text-amber-600">{capitalizeFirstLetter(approval)}</div>
+        ) : approval === "approved" ? (
+          <div className="text-green-600">{capitalizeFirstLetter(approval)}</div>
         ) : (
-          <div className="text-red-600">{capitalizeFirstLetter(status)}</div>
+          <div className="text-red-600">{capitalizeFirstLetter(approval)}</div>
         )}
         <b>Location:</b>
         <div>{location}</div>

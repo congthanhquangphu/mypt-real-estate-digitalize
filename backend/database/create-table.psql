@@ -4,13 +4,12 @@ DROP TABLE IF EXISTS "transaction" CASCADE;
 DROP TABLE IF EXISTS "token" CASCADE;
 DROP TABLE IF EXISTS "item" CASCADE;
 DROP TABLE IF EXISTS "owner" CASCADE;
-
 CREATE TABLE "property" (
   "id" serial PRIMARY KEY,
   "register_address" varchar,
   "title" varchar,
   "ipfs_cid" varchar,
-  "approval" bool,
+  "approval" varchar,
   "description" text,
   "location" varchar,
   "land_area" real,

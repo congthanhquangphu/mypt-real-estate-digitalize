@@ -16,7 +16,7 @@ const registry = (data, resultCallback) => {
             DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8
         )
     `, [
-        title, register_address, false, description, location, land_area, construction_area, profit
+        title, register_address, 'pending', description, location, land_area, construction_area, profit
     ], (err, res) => {
         if (res) {
             resultCallback(err, null);
@@ -26,16 +26,16 @@ const registry = (data, resultCallback) => {
     })
 }
 
-const getCount = (data, resultCallback) => {
-    const uploader_address = data.uploader_address;
+const getCountByApproval = (data, resultCallback) => {
+    const register_address = data.register_address;
     const approval = data.approval;
 
     db.pool.query(`
         SELECT count(*) 
         FROM PROPERTY
-        WHERE uploader_address=$1
+        WHERE register_address=$1
         AND approval=$2`, [
-        uploader_address, approval
+        register_address, approval
     ], (err, res) => {
         if (err) {
             console.log(err)
@@ -46,8 +46,32 @@ const getCount = (data, resultCallback) => {
     })
 }
 
-const getList = (data, resultCallback) => {
-    const uploader_address = data.uploader_address;
+const getCount = (data, resultCallback) => {
+    const register_address = data.register_address;
+    const approval = data.approval;
+
+    if (approval) {
+        getCountByApproval(data);
+        return;
+    }
+
+    db.pool.query(`
+        SELECT count(*) 
+        FROM PROPERTY
+        WHERE register_address=$1`, [
+        register_address
+    ], (err, res) => {
+        if (err) {
+            console.log(err)
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res);
+    })
+}
+
+const getListByApproval = (data, resultCallback) => {
+    const register_address = data.register_address;
     const approval = data.approval;
     const offset = data.offset;
     const limit = data.limit;
@@ -55,13 +79,41 @@ const getList = (data, resultCallback) => {
     db.pool.query(`
         SELECT * 
         FROM PROPERTY p
-        WHERE uploader_address=$1
+        WHERE register_address=$1
         AND approval=$2
         OFFSET $3
         LIMIT $4`, [
-        uploader_address, approval, offset, limit
+        register_address, approval, offset, limit
     ], (err, res) => {
         if (err) {
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res);
+    })
+}
+
+const getList = (data, resultCallback) => {
+    const register_address = data.register_address;
+    const approval = data.approval;
+    const offset = data.offset;
+    const limit = data.limit;
+
+    if (approval) {
+        getListByApproval(data, resultCallback);
+        return;
+    }
+
+    db.pool.query(`
+        SELECT * 
+        FROM PROPERTY p
+        WHERE register_address=$1
+        OFFSET $2
+        LIMIT $3`, [
+        register_address, offset, limit
+    ], (err, res) => {
+        if (err) {
+            console.error(err)
             resultCallback(err, null);
             return;
         }

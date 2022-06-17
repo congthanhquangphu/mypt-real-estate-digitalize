@@ -5,7 +5,7 @@ import BasicEstateItem from "components/BasicEstateItem";
 import * as config from "utils/config";
 import * as estate from "services/estate";
 
-const UploadedEstateCard = (props) => {
+const RegisteredEstateCard = (props) => {
   const className = props.className || "";
   const { currentAccount } = useContext(MetamaskContext);
 
@@ -15,30 +15,28 @@ const UploadedEstateCard = (props) => {
 
   useEffect(() => {
     refreshData();
-  }, [page, totalEstate]);
+  }, [page, currentAccount, totalEstate]);
 
   const onPageChange = (e) => {
     setPage(e);
   };
 
   const refreshData = () => {
-    if (currentAccount === "") return;
-
-    estate.getCount({ uploader_address: currentAccount }, (err, res) => {
+    estate.getCount({ register_address: currentAccount }, (err, res) => {
       if (err) return;
 
-      console.log(res);
       const count = parseInt(res.data.count);
       setTotalEstate(count);
 
-      const itemPerPage = config.constant.item_per_page_estate;
+      const itemPerPage = config.constant.item_per_page_registry;
       let data = {
+        register_address: currentAccount,
         limit: itemPerPage,
         offset: (page - 1) * itemPerPage,
       };
       estate.getList(data, (err, res) => {
         if (err) return;
-        // setListEstate(res.data.estates);
+        setListEstate(res.data.estates);
       });
     });
   };
@@ -58,7 +56,17 @@ const UploadedEstateCard = (props) => {
         ) : (
           <div className="grid grid-cols-3 w-full h-full place-items-center">
             {listEstate.map((element) => {
-              return <BasicEstateItem className="m-1" title={element.title} />;
+              return (
+                <BasicEstateItem
+                  className="m-1"
+                  key={element.id}
+                  id={element.id}
+                  approval={element.approval}
+                  title={element.title}
+                  location={element.location}
+                  profit={element.profit}
+                />
+              );
             })}
           </div>
         )}
@@ -70,11 +78,11 @@ const UploadedEstateCard = (props) => {
           value={page}
           onChange={onPageChange}
           pageSize={config.constant.item_per_page_registry}
-          total={20}
+          total={totalEstate}
         />
       </div>
     </div>
   );
 };
 
-export default UploadedEstateCard;
+export default RegisteredEstateCard;
