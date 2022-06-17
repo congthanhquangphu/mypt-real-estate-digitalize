@@ -1,14 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { InboxOutlined } from "@ant-design/icons";
-import { Button, Input, message, Upload, Form } from "antd";
+import {
+  message as AntMessage,
+  Button,
+  Input,
+  InputNumber,
+  message,
+  Upload,
+  Form,
+} from "antd";
 import MetamaskButton from "components/MetamaskButton";
 import { useForm } from "antd/lib/form/Form";
+import { existEmpty } from "utils/utils";
+import * as estate from "services/estate";
+import { MetamaskContext } from "context/MetamaskProvider";
 const { Dragger } = Upload;
 const { TextArea } = Input;
 
-const EstateRegistryForm = ({className}) => {
+const EstateRegistryForm = ({ className }) => {
+  const { currentAccount } = useContext(MetamaskContext);
+  const [form] = useForm();
+  const [canSubmit, setCanSubmit] = useState(false);
+
+  const onFieldsChange = () => {
+    const data = form.getFieldsValue();
+    data["register_address"] = currentAccount;
+    if (existEmpty(data)) {
+      setCanSubmit(false);
+      return;
+    }
+    setCanSubmit(true);
+  };
+
   const onFinish = (data) => {
-    console.log(data);
+    data["register_address"] = currentAccount;
+    
+    estate.registry(data, (err, res) => {
+      if (err) {
+        AntMessage.error("Registry failed");
+        console.error(err);
+        return;
+      }
+      AntMessage.success("Registry successful");
+      form.resetFields();
+    });
   };
 
   const draggerProps = {
@@ -38,43 +73,50 @@ const EstateRegistryForm = ({className}) => {
     <div className={`p-5 bg-white w-full rounded-xl ${className}`}>
       <h1>Registry form</h1>
       <hr className="m-2" />
-      <Form onFinish={onFinish}>
+      <Form onFinish={onFinish} onFieldsChange={onFieldsChange} form={form}>
         <div className="m-2">
           <h3>Title</h3>
           <Form.Item name="title">
             <Input size="large" placeholder="Real estate title" />
           </Form.Item>
           <div className="grid grid-cols-2 gap-x-2">
-            <div>
-              <h3>Location</h3>
-              <Form.Item name="location">
-                <Input size="large" placeholder="City" />
-              </Form.Item>
-            </div>
-            <div>
-              <h3>Profit (APY)</h3>
-              <Form.Item name="profit">
-                <Input size="large" placeholder="10" />
-              </Form.Item>
-            </div>
+            <h3>Location</h3>
+            <h3>Profit (APY)</h3>
+            <Form.Item name="location">
+              <Input size="large" placeholder="City" />
+            </Form.Item>
+            <Form.Item name="profit">
+              <InputNumber
+                min={0}
+                style={{ width: "100%" }}
+                size="large"
+                placeholder="10"
+              />
+            </Form.Item>
           </div>
           <div className="grid grid-cols-2 gap-x-2">
-            <div>
-              <h3>Land area (sqft)</h3>
-              <Form.Item name="land_area">
-                <Input size="large" placeholder="50" />
-              </Form.Item>
-            </div>
-            <div>
-              <h3>Construction area (sqft)</h3>
-              <Form.Item name="construction_area">
-                <Input size="large" placeholder="40" />
-              </Form.Item>
-            </div>
+            <h3>Land area (sqft)</h3>
+            <h3>Construction area (sqft)</h3>
+            <Form.Item name="land_area">
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                size="large"
+                placeholder="50"
+              />
+            </Form.Item>
+            <Form.Item name="construction_area">
+              <InputNumber
+                style={{ width: "100%" }}
+                min={0}
+                size="large"
+                placeholder="40"
+              />
+            </Form.Item>
           </div>
           <h3>Short description</h3>
           <Form.Item name="description">
-            <TextArea rows={4} placeholder="Description" maxLength={6} />
+            <TextArea rows={4} placeholder="Description" />
           </Form.Item>
         </div>
         <div className="m-2">
@@ -100,6 +142,7 @@ const EstateRegistryForm = ({className}) => {
             type="primary"
             className="w-full m-2"
             size="large"
+            disabled={!canSubmit}
           >
             Submit
           </Button>

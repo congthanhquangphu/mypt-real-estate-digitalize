@@ -6,7 +6,6 @@ import PendingEstateItem from "components/PedingEstateItem";
 const PendingEstateCard = ({ className }) => {
   const { currentAccount } = useContext(MetamaskContext);
 
-
   return (
     <div
       className={`bg-white min-h-full flex flex-col rounded-xl w-fit p-4 ${className}`}
@@ -21,13 +20,13 @@ const PendingEstateCard = ({ className }) => {
             <h2>Please connect your wallet to view estates</h2>
           </div>
         ) : (
-          <div className="flex flex-row flex-wrap items-center justify-between">
-            <PendingEstateItem title="Hello" />
-            <PendingEstateItem title="Hello" />
-            <PendingEstateItem title="Hello" />
-            <PendingEstateItem title="Hello" />
-            <PendingEstateItem title="Hello" />
-            <PendingEstateItem title="Hello" />
+          <div className="grid grid-cols-3 w-full h-full place-items-center">
+            <PendingEstateItem className="m-1" title="Hello" />
+            <PendingEstateItem className="m-1" title="Hello" />
+            <PendingEstateItem className="m-1" title="Hello" />
+            <PendingEstateItem className="m-1" title="Hello" />
+            <PendingEstateItem className="m-1" title="Hello" />
+            <PendingEstateItem className="m-1" title="Hello" />
           </div>
         )}
       </div>

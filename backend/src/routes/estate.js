@@ -1,7 +1,7 @@
 const estate = require('../controller/estate')
 
 const assignRoutes = (app) => {
-    app.post('/estate/registry', estate.getCount);
+    app.post('/estate/registry', estate.registry);
     app.post('/estate/getCount', estate.getCount);
     app.post('/estate/getList', estate.getList);
     app.post('/estate/getInformation', estate.getInformation);

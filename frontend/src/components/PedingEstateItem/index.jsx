@@ -8,6 +8,7 @@ const PendingEstateItem = (props) => {
   const image = props.image || defaultRealEstate;
   const location = props.location || "";
   const profit = props.profit || 0;
+  const className = props.className || "";
 
   const navigator = useNavigate();
 
@@ -17,7 +18,7 @@ const PendingEstateItem = (props) => {
 
   return (
     <button
-      className="border border-black-200 p-5 rounded-xl bg-gray-100 m-2"
+      className={`border border-black-200 p-5 rounded-xl w-fit h-fit bg-gray-100 ${className}`}
       onClick={onClickCard}
     >
       <div className="justify-center flex flex-row">

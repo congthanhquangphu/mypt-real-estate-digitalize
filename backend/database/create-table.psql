@@ -2,17 +2,19 @@ DROP TABLE IF EXISTS "property" CASCADE;
 DROP TABLE IF EXISTS "property_image" CASCADE;
 DROP TABLE IF EXISTS "transaction" CASCADE;
 DROP TABLE IF EXISTS "token" CASCADE;
+DROP TABLE IF EXISTS "item" CASCADE;
 DROP TABLE IF EXISTS "owner" CASCADE;
 
 CREATE TABLE "property" (
   "id" serial PRIMARY KEY,
+  "register_address" varchar,
   "title" varchar,
   "ipfs_cid" varchar,
   "approval" bool,
   "description" text,
   "location" varchar,
-  "land_area" int,
-  "construct_area" int,
+  "land_area" real,
+  "construction_area" real,
   "profit" real
 );
 
@@ -28,7 +30,6 @@ CREATE TABLE "token" (
   "property_id" int
 );
 
-DROP TABLE IF EXISTS "item" CASCADE;
 CREATE TABLE "item" (
   "id" serial PRIMARY KEY,
   "token_id" int,

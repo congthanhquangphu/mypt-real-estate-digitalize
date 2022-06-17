@@ -1,17 +1,44 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button, Form, Input, InputNumber } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
+import { useForm } from "antd/lib/form/Form";
+import { existEmpty } from "utils/utils";
 
 const BuyUtilityTokenCard = ({ className }) => {
-  const { utilityTokenSymbol } = useContext(MetamaskContext);
+  const { utilityTokenSymbol, currentAccount } = useContext(MetamaskContext);
+  const [form] = useForm();
+  const [estimatePrice, setEstimatePrice] = useState(0);
+  const [canSubmit, setCanSubmit] = useState(false);
+
+  const updateSubmit = () => {
+    const object = form.getFieldsValue();
+    if (existEmpty(object) || currentAccount === "") {
+      setCanSubmit(false);
+      return;
+    }
+    setCanSubmit(true);
+  };
+
+  const updateEstimatePrice = () => {
+
+  }
+
+  const onFieldsChange = () => {
+    updateEstimatePrice()
+    updateSubmit();
+  }
+
+  useEffect(() => {
+    updateSubmit();
+  }, []);
 
   const submitForm = (data) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   return (
     <div className={`p-4 bg-white rounded-xl ${className}`}>
-      <Form onFinish={submitForm}>
+      <Form onFinish={submitForm} form={form} onFieldsChange={onFieldsChange}>
         <h1>Buy utility token</h1>
         <hr className="my-2" />
         <div className="w-full">
@@ -31,6 +58,7 @@ const BuyUtilityTokenCard = ({ className }) => {
                 placeholder="0"
               />
             </Form.Item>
+            <b>Estimated price:</b> {estimatePrice} ETH
           </div>
           <div className="my-2">
             <Form.Item>
@@ -38,6 +66,7 @@ const BuyUtilityTokenCard = ({ className }) => {
                 type="primary"
                 size="large"
                 shape="round"
+                disabled={!canSubmit}
                 className="center w-full"
                 htmlType="submit"
               >

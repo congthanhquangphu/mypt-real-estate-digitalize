@@ -14,10 +14,10 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(log.logReq)
-app.use(auth.auth)
+// app.use(auth.auth)
 route.assignRoutes(app)
 
-//#endregion middleware
+// #endregion middleware
 
 //Start listen
 app.listen(config.server.port, () => {

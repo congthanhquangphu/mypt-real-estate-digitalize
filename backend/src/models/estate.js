@@ -1,4 +1,30 @@
-const db = require('./../utils/db')
+const db = require('../utils/db')
+
+const registry = (data, resultCallback) => {
+    const title = data.title;
+    const location = data.location;
+    const register_address = data.register_address;
+    const profit = data.profit;
+    const land_area = data.land_area;
+    const construction_area = data.construction_area;
+    const description = data.description;
+
+    db.pool.query(`
+        INSERT INTO property(
+            id, title, register_address, approval, description, location, land_area, construction_area, profit
+        ) VALUES(
+            DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8
+        )
+    `, [
+        title, register_address, false, description, location, land_area, construction_area, profit
+    ], (err, res) => {
+        if (res) {
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res)
+    })
+}
 
 const getCount = (data, resultCallback) => {
     const status = data.status;
@@ -6,9 +32,9 @@ const getCount = (data, resultCallback) => {
     db.pool.query(`
         SELECT count(*) 
         FROM PROPERTY
-        WHERE status=$1`,[
-            status
-        ], (err, res) => {
+        WHERE status=$1`, [
+        status
+    ], (err, res) => {
         if (err) {
             resultCallback(err, null);
             return;
@@ -65,6 +91,7 @@ const getInformation = (data, resultCallback) => {
 
 
 module.exports = {
+    registry,
     getCount,
     getList,
     getInformation

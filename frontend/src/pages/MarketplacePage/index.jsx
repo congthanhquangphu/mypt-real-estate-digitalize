@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import * as estate from "services/estate";
 import { capitalizeFirstLetter } from "utils/utils";
 import * as config from "utils/config.js";
+import CrowdFundingEstateItem from "components/CrowdFundingEstateItem";
 
 const MarketplacePage = (props) => {
   const [filterStatus, setFilterStatus] = useState("listing");
@@ -34,7 +35,6 @@ const MarketplacePage = (props) => {
 
       estate.getList(data, (err, res) => {
         if (err) return;
-        console.log(res);
         setListEstate(res.data.estates);
       });
     });
@@ -50,22 +50,22 @@ const MarketplacePage = (props) => {
         <h1>{capitalizeFirstLetter(sellType)} marketplace</h1>
         <hr className="p-2"/>
         <div className="min-h-screen flex flex-wrap justify-center">
-          {/* {listEstate.map((item) => {
+          {listEstate.map((item) => {
             return (
-              <PendingEstateCard
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                totalSupply={item.totalSupply}
-                profit={item.profit}
-                investTime={item.investTime}
-                status={item.status}
-                location={item.location}
-                currentInvestors={item.currentInvestors}
-                currentParts={item.currentParts}
+              <CrowdFundingEstateItem
+                // key={item.id}
+                // id={item.id}
+                // title={item.title}
+                // totalSupply={item.totalSupply}
+                // profit={item.profit}
+                // investTime={item.investTime}
+                // status={item.status}
+                // location={item.location}
+                // currentInvestors={item.currentInvestors}
+                // currentParts={item.currentParts}
               />
             );
-          })} */}
+          })}
         </div>
         <Pagination
           className="flex flex-row justify-center m-2"

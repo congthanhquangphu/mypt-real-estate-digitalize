@@ -1,7 +1,0 @@
-INSERT INTO account(fullname, email, password, wallet_address) VALUES ('Đỗ Vương Phúc','phuc16102001@gmail.com','c922a25f9b38b3a5a30c354246275af1dd5588d916ad8de33ba669f1b4ae32e4','0x08A2231B1722FDAA10542d62Fbe983246dc2C3f2');
-INSERT INTO account(fullname, email, password, wallet_address) VALUES ('Hoàng Như Thanh','thanhhoang4869@gmail.com','02ad1032015a37ff232529b9304192f22bb0cfd6603282115e851a627e79bb9d','0x08A2231B1722FDAA10542d62Fbe983246dc2C3f2');
-
-INSERT INTO property(seller, title, total_supply, status) VALUES ('phuc16102001@gmail.com','Vạn Phúc City',1000,'selling');
-INSERT INTO property(seller, title, total_supply, status) VALUES ('phuc16102001@gmail.com','Đà Lạt Xanh',2000,'selling');
-INSERT INTO property(seller, title, total_supply, status) VALUES ('phuc16102001@gmail.com','Riverside Apartment',500,'upcoming');
-INSERT INTO property(seller, title, total_supply, status) VALUES ('phuc16102001@gmail.com','Greenfield Plaza',1000,'sold');

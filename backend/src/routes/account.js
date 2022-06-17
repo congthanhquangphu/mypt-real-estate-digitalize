@@ -1,4 +1,4 @@
-const account = require('../controller/account')
+const account = require('./../controller/account')
 
 const assignRoutes = (app) => {
     app.post('/account/login',account.login);

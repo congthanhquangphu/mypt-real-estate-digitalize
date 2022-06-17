@@ -1,6 +1,31 @@
 const Estate = require('../models/estate')
 const config = require('../config/config')
 
+const registry = (req, res) => {
+    data = {
+        title: req.body.title,
+        register_address: req.body.register_address,
+        location: req.body.location,
+        profit: req.body.profit,
+        land_area: req.body.land_area,
+        construction_area: req.body.construction_area,
+        description: req.body.description
+    }
+    Estate.registry(data, (err, result) => {
+        if (err) {
+            res.send({
+                exitcode: 1,
+                message: err
+            })
+            return;
+        }
+        res.send({
+            exitcode: 0,
+            message: "Registry successfully"
+        })
+    })
+}
+
 const getCount = (req, res) => {
     data = {
         status: req.body.filter || ""
@@ -11,13 +36,12 @@ const getCount = (req, res) => {
                 exitcode: 1,
                 message: err
             })
+            return;
         }
-        if (result) {
-            res.send({
-                exitcode: 0,
-                count: result.rows[0].count,
-            })
-        }
+        res.send({
+            exitcode: 0,
+            count: result.rows[0].count,
+        })
     })
 }
 
@@ -53,6 +77,7 @@ const getInformation = (req, res) => {
 }
 
 module.exports = {
+    registry,
     getCount,
     getList,
     getInformation
