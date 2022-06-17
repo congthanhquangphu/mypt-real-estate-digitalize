@@ -52,6 +52,8 @@ export const blockchain = {
     }
 }
 
+export const aurorascan_api = "Z8ZRNGGQJI4S9YPPEFP8IXSWZC8WFDVI7I";
+
 export const constant = {
     item_per_page_marketplace: 10,
     item_per_page_registry: 6

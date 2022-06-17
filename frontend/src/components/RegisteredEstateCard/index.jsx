@@ -42,7 +42,7 @@ const RegisteredEstateCard = (props) => {
   };
   return (
     <div
-      className={`bg-white min-h-full flex flex-col rounded-xl w-fit p-4 ${className}`}
+      className={`bg-white flex flex-col rounded-xl w-fit p-4 ${className}`}
     >
       <div>
         <h1>Uploaded real estates</h1>

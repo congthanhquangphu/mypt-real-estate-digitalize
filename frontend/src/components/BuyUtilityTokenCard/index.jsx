@@ -52,7 +52,8 @@ const BuyUtilityTokenCard = ({ className }) => {
   const handleWithdraw = async () => {
     try {
       setIsWithdrawLoading(true);
-      await withdrawUtilityToken(currentAccount);
+      const transaction = await withdrawUtilityToken(currentAccount);
+      console.log(transaction);
       setIsWithdrawLoading(false);
       AntMessage.success("Withdraw successfully");
 
@@ -62,7 +63,7 @@ const BuyUtilityTokenCard = ({ className }) => {
     }
   };
 
-  const submitForm = async (data) => {
+  const buyToken = async (data) => {
     try {
       const object = data;
       const receiver = object.receiver;
@@ -71,7 +72,9 @@ const BuyUtilityTokenCard = ({ className }) => {
       form.resetFields();
       updateSubmit();
 
-      await buyUtilityToken(receiver, estimatePrice);
+      const transaction = await buyUtilityToken(receiver, estimatePrice);
+      console.log(transaction);
+
       setIsBuyLoading(false);
       AntMessage.success("Buy successfully");
     } catch (err) {
@@ -86,20 +89,25 @@ const BuyUtilityTokenCard = ({ className }) => {
 
   return (
     <div className={`p-4 bg-white rounded-xl ${className}`}>
-      <Form onFinish={submitForm} form={form} onFieldsChange={onFieldsChange}>
+      <Form onFinish={buyToken} form={form} onFieldsChange={onFieldsChange}>
         <h1>Buy utility token</h1>
         <hr className="my-2" />
         <div className="w-full">
           <div className="my-2">
             <h3>Receiver address</h3>
             <Form.Item name="receiver">
-              <Input size="large" placeholder="0x23fe..." />
+              <Input
+                rules={[{ required: true }]}
+                size="large"
+                placeholder="0x23fe..."
+              />
             </Form.Item>
           </div>
           <div className="my-2">
             <h3>Amount</h3>
             <Form.Item name="amount">
               <InputNumber
+                min={0}
                 addonAfter={utilityTokenSymbol}
                 style={{ width: "100%" }}
                 size="large"
