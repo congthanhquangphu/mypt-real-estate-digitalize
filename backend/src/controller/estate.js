@@ -1,5 +1,5 @@
-const Estate = require('../models/estate')
-const config = require('../config/config')
+const Estate = require('models/estate')
+const config = require('config/config')
 
 const registry = (req, res) => {
     data = {

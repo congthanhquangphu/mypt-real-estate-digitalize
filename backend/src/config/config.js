@@ -4,7 +4,7 @@ exports.server = {
         '/account/signup', 
         '/account/login', 
         '/estate/getCount', 
-        'estate/getInformation', 
+        '/estate/getInformation', 
         '/estate/getList'
     ],
     expTime: 60 * 60 * 24,

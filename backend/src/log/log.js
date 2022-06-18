@@ -1,7 +1,7 @@
-const logReq = (req,res,next) => {
+const log = (req, res, next) => {
     const currentDateTime = new Date();
     const year = currentDateTime.getFullYear()
-    const month = currentDateTime.getMonth()+1
+    const month = currentDateTime.getMonth() + 1
     const date = currentDateTime.getDate()
     const hour = currentDateTime.getHours()
     const minute = currentDateTime.getMinutes()
@@ -18,5 +18,5 @@ const logReq = (req,res,next) => {
 
 
 module.exports = {
-    logReq
+    log
 }

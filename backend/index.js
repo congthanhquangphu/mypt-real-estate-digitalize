@@ -1,10 +1,11 @@
+require('module-alias/register')
 const   express = require('express')
         app = express()
-        route = require('./routes/routes')
-        config = require('./config/config')
+        route = require('routes/routes')
+        config = require('config/config')
         cors = require('cors')
-        log = require('./log/log')
-        auth = require('./auth/auth')
+        log = require('log/log')
+        auth = require('auth/auth')
 
 //==================== Library =======================
 
@@ -13,7 +14,7 @@ const   express = require('express')
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(log.logReq)
+app.use(log.log)
 // app.use(auth.auth)
 route.assignRoutes(app)
 
