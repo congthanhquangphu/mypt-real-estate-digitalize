@@ -8,17 +8,19 @@ const registry = (data, resultCallback) => {
     const land_area = data.land_area;
     const construction_area = data.construction_area;
     const description = data.description;
+    const cid = data.cid;
 
     db.pool.query(`
         INSERT INTO property(
-            id, title, register_address, approval, description, location, land_area, construction_area, profit
+            id, title, register_address, approval, description, location, land_area, construction_area, profit, ipfs_cid
         ) VALUES(
-            DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8
+            DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
         )
     `, [
-        title, register_address, 'pending', description, location, land_area, construction_area, profit
+        title, register_address, 'pending', description, location, land_area, construction_area, profit, cid
     ], (err, res) => {
-        if (res) {
+        if (err) {
+            console.log(err)
             resultCallback(err, null);
             return;
         }

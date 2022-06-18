@@ -1,9 +1,7 @@
 import React from "react";
-import { InboxOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Menu, Space, Input, message, Upload } from "antd";
 import MetamaskButton from "components/MetamaskButton";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
-import { MenuProps } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 const handleMenuClick = (e) => {
   message.info("Click on menu item.");
@@ -38,8 +36,8 @@ const tokenMenu = (
   <Menu
     items={[
       {
-        key: "re01",
-        label: "RE01",
+        key: "REUT",
+        label: "REUT",
       },
     ]}
   />
@@ -54,7 +52,7 @@ const TokenSellCard = (props) => {
       <div className="grid grid-cols-3 gap-x-2">
         <div>
           <h3>Sell type</h3>
-          <Dropdown overlay={sellTypeMenu}>
+          <Dropdown overlay={sellTypeMenu} size="large">
             <Button>
               <Space>
                 Choose sell type

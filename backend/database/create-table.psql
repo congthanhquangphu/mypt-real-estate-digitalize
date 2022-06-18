@@ -1,9 +1,3 @@
-DROP TABLE IF EXISTS "property" CASCADE;
-DROP TABLE IF EXISTS "property_image" CASCADE;
-DROP TABLE IF EXISTS "transaction" CASCADE;
-DROP TABLE IF EXISTS "token" CASCADE;
-DROP TABLE IF EXISTS "item" CASCADE;
-DROP TABLE IF EXISTS "owner" CASCADE;
 CREATE TABLE "property" (
   "id" serial PRIMARY KEY,
   "register_address" varchar,
@@ -29,29 +23,5 @@ CREATE TABLE "token" (
   "property_id" int
 );
 
-CREATE TABLE "item" (
-  "id" serial PRIMARY KEY,
-  "token_id" int,
-  "selling_type" varchar,
-  "seller_address" varchar
-);
-
-CREATE TABLE "owner" (
-  "property_id" int,
-  "owner_address" varchar,
-  PRIMARY KEY ("property_id", "owner_address")
-);
-
-CREATE TABLE "transaction" (
-  "transaction_hash" varchar PRIMARY KEY,
-  "from" varchar,
-  "to" varchar,
-  "amount" int,
-  "token" varchar,
-  "created_timestamp" timestamp
-);
-
 ALTER TABLE "property_image" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
 ALTER TABLE "token" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
-ALTER TABLE "item" ADD FOREIGN KEY ("token_id") REFERENCES "token" ("token_id");
-ALTER TABLE "owner" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");

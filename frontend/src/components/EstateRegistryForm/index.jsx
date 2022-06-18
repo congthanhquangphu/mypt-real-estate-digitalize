@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { InboxOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   message as AntMessage,
   Button,
@@ -21,10 +21,13 @@ const EstateRegistryForm = ({ className }) => {
   const { currentAccount } = useContext(MetamaskContext);
   const [form] = useForm();
   const [canSubmit, setCanSubmit] = useState(false);
+  const [cid, setCid] = useState("");
 
   const onFieldsChange = () => {
     const data = form.getFieldsValue();
     data["register_address"] = currentAccount;
+    data["cid"] = cid;
+
     if (existEmpty(data)) {
       setCanSubmit(false);
       return;
@@ -32,9 +35,26 @@ const EstateRegistryForm = ({ className }) => {
     setCanSubmit(true);
   };
 
+  const uploadProps = {
+    name: "certificate",
+    maxCount: 1,
+    action: "http://localhost:8080/estate/upload",
+    accept: "application/pdf",
+    onChange(info) {
+      const { status, response } = info.file;
+      if (status === "done") {
+        setCid(response.cid);
+        AntMessage.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        AntMessage.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
   const onFinish = (data) => {
     data["register_address"] = currentAccount;
-    
+    data["cid"] = cid;
+
     estate.registry(data, (err, res) => {
       if (err) {
         AntMessage.error("Registry failed");
@@ -45,29 +65,6 @@ const EstateRegistryForm = ({ className }) => {
       form.resetFields();
       window.location.reload();
     });
-  };
-
-  const draggerProps = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-
-    onChange(info) {
-      const { status } = info.file;
-
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
   };
 
   return (
@@ -121,19 +118,10 @@ const EstateRegistryForm = ({ className }) => {
           </Form.Item>
         </div>
         <div className="m-2">
-          <h3>Upload your Land use rights to verify</h3>
-          <Dragger {...draggerProps}>
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">
-              Click or drag file to this area to upload
-            </p>
-            <p className="ant-upload-hint">
-              Support for a single or bulk upload. Strictly prohibit from
-              uploading company data or other band files
-            </p>
-          </Dragger>
+          <h3>Certificate of land use rights</h3>
+          <Upload {...uploadProps}>
+            <Button icon={<UploadOutlined />}>Select PDF file</Button>
+          </Upload>
         </div>
         <MetamaskButton className="m-2 w-full" />
         <Form.Item>

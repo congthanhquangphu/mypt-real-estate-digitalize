@@ -1,10 +1,10 @@
 exports.server = {
     port: 8080,
     noTokenUrl: [
-        '/account/signup', 
-        '/account/login', 
-        '/estate/getCount', 
-        '/estate/getInformation', 
+        '/account/signup',
+        '/account/login',
+        '/estate/getCount',
+        '/estate/getInformation',
         '/estate/getList'
     ],
     expTime: 60 * 60 * 24,
@@ -20,4 +20,5 @@ exports.database = {
 }
 
 exports.constant = {
+    upload_path: "uploads/"
 }

@@ -1,5 +1,4 @@
 const Estate = require('models/estate')
-const config = require('config/config')
 
 const registry = (req, res) => {
     data = {
@@ -9,7 +8,8 @@ const registry = (req, res) => {
         profit: req.body.profit,
         land_area: req.body.land_area,
         construction_area: req.body.construction_area,
-        description: req.body.description
+        description: req.body.description,
+        cid: req.body.cid
     }
     Estate.registry(data, (err, result) => {
         if (err) {
@@ -46,6 +46,14 @@ const getCount = (req, res) => {
     })
 }
 
+const upload = (req, res) => {
+    res.send({
+        exitcode: 0,
+        message: "Upload file successfully",
+        cid: req.body.fileName
+    })
+}
+
 const getList = (req, res) => {
     data = {
         register_address: req.body.register_address || "",
@@ -53,7 +61,6 @@ const getList = (req, res) => {
         limit: req.body.limit,
         offset: req.body.offset,
     }
-    console.log(data)
     Estate.getList(data, (err, result) => {
         if (err) {
             res.send({
@@ -82,6 +89,7 @@ const getInformation = (req, res) => {
 module.exports = {
     registry,
     getCount,
+    upload,
     getList,
     getInformation
 }
