@@ -23,7 +23,7 @@ const EstateRegistryForm = ({ className }) => {
   const [canSubmit, setCanSubmit] = useState(false);
   const [cid, setCid] = useState("");
 
-  const onFieldsChange = () => {
+  const updateCanSubmit = () => {
     const data = form.getFieldsValue();
     data["register_address"] = currentAccount;
     data["cid"] = cid;
@@ -40,14 +40,16 @@ const EstateRegistryForm = ({ className }) => {
     maxCount: 1,
     action: "http://localhost:8080/estate/upload",
     accept: "application/pdf",
+    
     onChange(info) {
-      const { status, response } = info.file;
+      const { status, response, name } = info.file;
       if (status === "done") {
         setCid(response.cid);
-        AntMessage.success(`${info.file.name} file uploaded successfully.`);
+        AntMessage.success(`${name} file uploaded successfully.`);
       } else if (status === "error") {
-        AntMessage.error(`${info.file.name} file upload failed.`);
+        AntMessage.error(`${name} file upload failed.`);
       }
+      updateCanSubmit();
     },
   };
 
@@ -71,7 +73,7 @@ const EstateRegistryForm = ({ className }) => {
     <div className={`p-5 bg-white w-full rounded-xl ${className}`}>
       <h1>Registry form</h1>
       <hr className="m-2" />
-      <Form onFinish={onFinish} onFieldsChange={onFieldsChange} form={form}>
+      <Form onFinish={onFinish} onFieldsChange={updateCanSubmit} form={form}>
         <div className="m-2">
           <h3>Title</h3>
           <Form.Item name="title">
