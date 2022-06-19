@@ -157,11 +157,35 @@ const getInformation = (req, res) => {
     })
 }
 
+const acceptRegistry = (req, res) => {
+    data = {
+        estate_id: req.body.estate_id,
+        cid: req.body.cid,
+        token_id: req.body.token_id
+    }
+    Estate.acceptRegistry(data, (err, result) => {
+        console.log(result, err)
+        if (err) {
+            res.send({
+                exitcode: 1,
+                message: "Cannot update estate registry"
+            })
+            return;
+        }
+
+        res.send({
+            exitcode: 0,
+            message: "Update estate successfully"
+        })
+    })
+}
+
 module.exports = {
     registry,
     getCount,
     uploadCertificate,
     getList,
     uploadIPFS,
+    acceptRegistry,
     getInformation
 }

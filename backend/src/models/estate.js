@@ -162,10 +162,31 @@ const getCertificatePath = (data, resultCallback) => {
     })
 }
 
+const acceptRegistry = (data, resultCallback) => {
+    const estate_id = data.estate_id
+    const token_id = data.token_id
+    const cid = data.cid
+
+    db.pool.query(`
+        UPDATE property
+        SET token_id = $1, ipfs_cid = $2, approval='approved'
+        WHERE id = $3
+    `, [
+        token_id, cid, estate_id
+    ], (err, res) => {
+        if (err) {
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res)
+    })
+}
+
 module.exports = {
     registry,
     getCount,
     getList,
     getCertificatePath,
+    acceptRegistry,
     getInformation
 }

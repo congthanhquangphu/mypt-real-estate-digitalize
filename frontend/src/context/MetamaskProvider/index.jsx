@@ -40,6 +40,14 @@ export const MetamaskProvider = ({ children }) => {
     );
   };
 
+  const getSecurityContract = (isView = true) => {
+    return getContract(
+      config.contract.securityContract.address,
+      config.contract.securityContract.abi,
+      isView
+    );
+  };
+
   ethereum.on("accountsChanged", async () => {
     checkWalletConnected();
   });
@@ -80,6 +88,7 @@ export const MetamaskProvider = ({ children }) => {
       setCurrentAccount(account);
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -90,6 +99,7 @@ export const MetamaskProvider = ({ children }) => {
       setCurrentUtilityBalance(ethers.utils.formatEther(utilityBalance));
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -99,6 +109,7 @@ export const MetamaskProvider = ({ children }) => {
       setCurrentBalance(ethers.utils.formatEther(balance));
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -109,6 +120,7 @@ export const MetamaskProvider = ({ children }) => {
       setUtilityTokenSymbol(symbol);
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -119,6 +131,7 @@ export const MetamaskProvider = ({ children }) => {
       return price;
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -142,6 +155,7 @@ export const MetamaskProvider = ({ children }) => {
       return await transaction.wait();
     } catch (err) {
       console.log(err);
+      throw err;
     }
   };
 
@@ -186,6 +200,21 @@ export const MetamaskProvider = ({ children }) => {
     });
   };
 
+  const mintToken = async (token_id, uri, beneficiary, total_supply) => {
+    try {
+      const securityContract = getSecurityContract(false);
+      const transaction = await securityContract.mintToken(
+        token_id,
+        uri,
+        beneficiary,
+        total_supply
+      );
+      return await transaction.wait();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     checkWalletConnected();
     updateUtilitySymbol();
@@ -206,6 +235,7 @@ export const MetamaskProvider = ({ children }) => {
         getUtilityPrice,
         getUtilityRate,
         withdrawUtilityToken,
+        mintToken,
         currentAccount,
         currentBalance,
         currentUtilityBalance,

@@ -11,7 +11,7 @@ const EstateDetailCard = (props) => {
   const land_area = props.land_area || 0;
   const construction_area = props.construction_area || 0;
   const description = props.description || "";
-  const cid = props.cid || "";
+  const cid = props.ipfs_cid || "";
   const token_id = props.token_id || "";
   const total_supply = props.total_supply || 0;
   const className = props.className;

@@ -31,7 +31,7 @@ const EstateDetailPage = () => {
     <div>
       <div className="flex flex-row gap-x-2 w-full">
         <EstateDetailCard {...estateDetail} className="w-9/12" />
-        <VerificationCard className="w-3/12" estate_id={estate_id} />
+        <VerificationCard className="w-3/12" {...estateDetail} />
       </div>
       <div className="flex flex-row"></div>
     </div>

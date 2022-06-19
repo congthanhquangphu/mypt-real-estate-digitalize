@@ -1,35 +1,56 @@
 import { Button } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { constant } from "utils/config";
 import { message as AntMessage } from "antd";
-import { mintToken, uploadIPFS } from "services/estate";
+import * as estate from "services/estate";
 
 const VerificationCard = (props) => {
-  const { currentAccount } = useContext(MetamaskContext);
+  const { currentAccount, mintToken } = useContext(MetamaskContext);
+  const [isAcceptLoading, setIsAcceptLoading] = useState(false);
   const className = props.className;
-  const estate_id = props.estate_id;
+  const estate_id = props.id;
+  const register_address = props.register_address || "";
+  const total_supply = props.total_supply || 0;
+  const approval = props.approval || "";
 
-  const handleAcceptRegistry = () => {
-    uploadIPFS({ estate_id: estate_id }, (err, res) => {
+  const handleAcceptRegistry = async () => {
+    setIsAcceptLoading(true);
+
+    await estate.uploadIPFS({ estate_id: estate_id }, async (err, res) => {
       if (err) {
         AntMessage.error("Cannot upload to IPFS");
         return;
       }
 
       const cid = res.data.cid;
+      const token_id = estate_id;
+      const transaction = await mintToken(
+        token_id,
+        cid,
+        register_address,
+        total_supply
+      );
+      console.log(transaction);
 
       const data = {
         estate_id: estate_id,
+        token_id: token_id,
         cid: cid,
       };
 
-      mintToken(data, (err, res) => {
+      await estate.mintToken(data, (err, res) => {
         if (err) {
+          console.log(err)
           AntMessage.error("Cannot mint token");
           return;
         }
+      
+        AntMessage.success("Verify successfully");
+        window.location.reload();
       });
+
+      setIsAcceptLoading(false);
     });
   };
 
@@ -41,24 +62,31 @@ const VerificationCard = (props) => {
         <h1>Verification</h1>
         <hr className="my-2" />
       </div>
-      {currentAccount === constant.admin ? (
-        <div className="w-full flex justify-center items-center text-center p-4 h-3/4">
-          <Button
-            onClick={handleAcceptRegistry}
-            style={{
-              borderRadius: "5%",
-              backgroundColor: "green",
-              color: "white",
-              width: "70%",
-              height: "30%",
-            }}
-          >
-            Accept
-          </Button>
-        </div>
+      {approval === "pending" ? (
+        currentAccount === constant.admin ? (
+          <div className="w-full flex justify-center items-center text-center p-4 h-3/4">
+            <Button
+              onClick={handleAcceptRegistry}
+              style={{
+                width: "70%",
+                height: "30%",
+                backgroundColor: "green",
+                color: "white",
+              }}
+              loading={isAcceptLoading}
+              disabled={isAcceptLoading}
+            >
+              Accept
+            </Button>
+          </div>
+        ) : (
+          <div className="w-full flex justify-center items-center text-center p-4 h-3/4">
+            <h1 className="text-red-600">Only admin can verify</h1>
+          </div>
+        )
       ) : (
         <div className="w-full flex justify-center items-center text-center p-4 h-3/4">
-          <h1 className="text-red-600">Only admin can verify</h1>
+          <h1 className="text-green-600">The estate was accepted</h1>
         </div>
       )}
     </div>

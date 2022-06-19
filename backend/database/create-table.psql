@@ -5,6 +5,7 @@ CREATE TABLE "property" (
   "id" serial PRIMARY KEY,
   "register_address" varchar,
   "title" varchar,
+  "token_id" varchar,
   "ipfs_cid" varchar,
   "certificate_path" varchar,
   "total_supply" int,
