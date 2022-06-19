@@ -1,20 +1,9 @@
 import React from "react";
 import AccountCard from "components/AccountCard";
-import TransactionCard from "components/TransactionCard";
+import UserTransactionCard from "components/UserTransactionCard";
 import BuyUtilityTokenCard from "components/BuyUtilityTokenCard";
 
 const UserPage = () => {
-  const transactions = [];
-  for (let i = 0; i < 0; i++) {
-    transactions.push({
-      key: `0x000${i}`,
-      hash: `0x000${i}`,
-      sender: "0x0001",
-      receiver: "0x0002",
-      amount: 10,
-      token: "ETH",
-    });
-  }
   
   return (
     <div className="flex flex-col justify-center w-full items-center">
@@ -23,7 +12,7 @@ const UserPage = () => {
             <AccountCard className="m-2"/>
             <BuyUtilityTokenCard className="m-2"/>
           </div>
-          <TransactionCard className="m-2 w-9/12" transactions={transactions} />
+          <UserTransactionCard className="m-2 w-9/12" />
         </div>
     </div>
   );

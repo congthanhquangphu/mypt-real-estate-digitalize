@@ -103,6 +103,62 @@ export const MetamaskProvider = ({ children }) => {
     }
   };
 
+  const getSecurityOwnedToken = async (limit, offset) => {
+    const tokens = await getSecurityOwnedTokenIds();
+    if (offset >= tokens.length) {
+      throw Error("Index out of boundary");
+    }
+    return tokens.slice(offset, Math.min(tokens.length, offset + limit));
+  };
+
+  const getSecurityOwnedTokenCount = async () => {
+    const tokens = await getSecurityOwnedTokenIds();
+    return tokens.length;
+  };
+
+  const getSecurityOwnedTokenIds = async () => {
+    const ids = await getSecurityTokenIds();
+    const balances = await getSecurityTokenBatch(ids);
+    const result = balances
+      .map((balance, index) => {
+        return {
+          token_id: ids[index],
+          balance,
+        };
+      })
+      .filter((token) => token.balance > 0);
+    return result;
+  };
+
+  const getSecurityTokenIds = async () => {
+    try {
+      const securityContract = getSecurityContract();
+      const ids = await securityContract.getIds();
+      const result = ids.map(
+        (id) => ethers.utils.formatEther(id) * Math.pow(10, 18)
+      );
+      return result;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
+  const getSecurityTokenBatch = async (ids) => {
+    try {
+      const securityContract = getSecurityContract();
+      const addresses = ids.map((_) => currentAccount);
+      const balances = await securityContract.balanceOfBatch(addresses, ids);
+      const result = balances.map(
+        (balance) => parseInt(ethers.utils.formatEther(balance) * Math.pow(10, 18))
+      );
+      return result;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const updateBalance = async () => {
     try {
       const balance = await provider.getBalance(currentAccount);
@@ -234,8 +290,11 @@ export const MetamaskProvider = ({ children }) => {
         buyUtilityToken,
         getUtilityPrice,
         getUtilityRate,
+        getSecurityOwnedTokenCount,
+        getSecurityTokenIds,
         withdrawUtilityToken,
         mintToken,
+        getSecurityOwnedToken,
         currentAccount,
         currentBalance,
         currentUtilityBalance,

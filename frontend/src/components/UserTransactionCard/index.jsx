@@ -6,7 +6,7 @@ import { fetchTransaction } from "services/aurorascan";
 import { shortenAddress } from "utils/utils";
 import { MetamaskContext } from "context/MetamaskProvider";
 
-const TransactionCard = (props) => {
+const UserTransactionCard = (props) => {
   const className = props.className || "";
   const { currentAccount } = useContext(MetamaskContext);
   const [transactionHistory, setTransactionHistory] = useState([]);
@@ -91,4 +91,4 @@ const TransactionCard = (props) => {
   );
 };
 
-export default TransactionCard;
+export default UserTransactionCard;

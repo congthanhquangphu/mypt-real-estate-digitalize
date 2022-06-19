@@ -74,7 +74,7 @@ const EstateDetailCard = (props) => {
             <b>Token ID:</b> {token_id}
           </div>
           <div>
-            <b>CID:</b> {cid}
+            <b>CID:</b> <a target="blank" href={`https://${cid}.ipfs.dweb.link/`}>{cid}</a>
           </div>
         </div>
       </div>

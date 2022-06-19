@@ -11,6 +11,7 @@ const BasicEstateItem = (props) => {
   const profit = props.profit || 0;
   const approval = props.approval || "pending";
   const className = props.className || "";
+  const children = props.children;
 
   const navigator = useNavigate();
 
@@ -31,17 +32,27 @@ const BasicEstateItem = (props) => {
       <div className="grid p-2 text-left gap-x-2 grid-cols-2">
         <b>Approval:</b>
         {approval === "pending" ? (
-          <div className="text-amber-600">{capitalizeFirstLetter(approval)}</div>
+          <div className="text-amber-600">
+            {capitalizeFirstLetter(approval)}
+          </div>
         ) : approval === "approved" ? (
-          <div className="text-green-600">{capitalizeFirstLetter(approval)}</div>
+          <div className="text-green-600">
+            {capitalizeFirstLetter(approval)}
+          </div>
         ) : (
           <div className="text-red-600">{capitalizeFirstLetter(approval)}</div>
         )}
         <b>Location:</b>
         <div>{location}</div>
         <b>Profit expectation:</b>
-        <div>{profit}% APR</div>
+        <div>{profit}% APR</div>{" "}
       </div>
+      {children && (
+        <>
+          <hr className="my-2" />
+          {children}
+        </>
+      )}
     </button>
   );
 };
