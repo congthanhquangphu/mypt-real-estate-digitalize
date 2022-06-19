@@ -1,1 +1,1 @@
-# NPT Real Estate Frontend
+# MYPT Frontend
