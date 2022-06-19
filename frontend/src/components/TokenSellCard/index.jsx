@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Dropdown, Menu, Space, Input, message, Upload } from "antd";
+import { Button, Dropdown, Menu, Space, Input, message } from "antd";
 import MetamaskButton from "components/MetamaskButton";
 import { DownOutlined } from "@ant-design/icons";
 

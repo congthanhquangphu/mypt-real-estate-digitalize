@@ -15,7 +15,7 @@ exports.database = {
     host: 'localhost',
     user: 'postgres',
     password: '161026',
-    database: 'npt',
+    database: 'mypt',
     port: "5432"
 }
 

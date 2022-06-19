@@ -26,3 +26,12 @@ export const getList = async (data, callback) => {
         callback(err, null);
     }
 }
+
+export const getInformation = async (data, callback) => {
+    try {
+        let res = await api.post("/estate/getInformation", data);
+        callback(null, res);
+    } catch (err) {
+        callback(err, null);
+    }
+}

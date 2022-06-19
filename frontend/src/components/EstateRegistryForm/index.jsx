@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import {
   message as AntMessage,
   Button,
   Input,
   InputNumber,
-  message,
   Upload,
   Form,
 } from "antd";
@@ -14,19 +13,18 @@ import { useForm } from "antd/lib/form/Form";
 import { existEmpty } from "utils/utils";
 import * as estate from "services/estate";
 import { MetamaskContext } from "context/MetamaskProvider";
-const { Dragger } = Upload;
 const { TextArea } = Input;
 
 const EstateRegistryForm = ({ className }) => {
   const { currentAccount } = useContext(MetamaskContext);
   const [form] = useForm();
   const [canSubmit, setCanSubmit] = useState(false);
-  const [cid, setCid] = useState("");
+  const [certificatePath, setCertificatePath] = useState("");
 
   const updateCanSubmit = () => {
     const data = form.getFieldsValue();
     data["register_address"] = currentAccount;
-    data["cid"] = cid;
+    data["certificate_path"] = certificatePath;
 
     if (existEmpty(data)) {
       setCanSubmit(false);
@@ -35,27 +33,31 @@ const EstateRegistryForm = ({ className }) => {
     setCanSubmit(true);
   };
 
+  useEffect(() => {
+    updateCanSubmit();
+  }, [currentAccount, certificatePath]);
+
   const uploadProps = {
     name: "certificate",
     maxCount: 1,
     action: "http://localhost:8080/estate/upload",
     accept: "application/pdf",
-    
+
     onChange(info) {
       const { status, response, name } = info.file;
       if (status === "done") {
-        setCid(response.cid);
+        setCertificatePath(response.certificatePath);
         AntMessage.success(`${name} file uploaded successfully.`);
       } else if (status === "error") {
+        setCertificatePath("");
         AntMessage.error(`${name} file upload failed.`);
       }
-      updateCanSubmit();
     },
   };
 
   const onFinish = (data) => {
     data["register_address"] = currentAccount;
-    data["cid"] = cid;
+    data["certificatePath"] = certificatePath;
 
     estate.registry(data, (err, res) => {
       if (err) {
@@ -75,10 +77,21 @@ const EstateRegistryForm = ({ className }) => {
       <hr className="m-2" />
       <Form onFinish={onFinish} onFieldsChange={updateCanSubmit} form={form}>
         <div className="m-2">
-          <h3>Title</h3>
-          <Form.Item name="title">
-            <Input size="large" placeholder="Real estate title" />
-          </Form.Item>
+          <div className="grid grid-cols-2 gap-x-2">
+            <h3>Title</h3>
+            <h3>Number of tokens</h3>
+            <Form.Item name="title">
+              <Input size="large" placeholder="Real estate title" />
+            </Form.Item>
+            <Form.Item name="total_supply">
+              <InputNumber
+                min={0}
+                style={{ width: "100%" }}
+                size="large"
+                placeholder="1000"
+              />
+            </Form.Item>
+          </div>
           <div className="grid grid-cols-2 gap-x-2">
             <h3>Location</h3>
             <h3>Profit (APY)</h3>
@@ -95,8 +108,8 @@ const EstateRegistryForm = ({ className }) => {
             </Form.Item>
           </div>
           <div className="grid grid-cols-2 gap-x-2">
-            <h3>Land area (sqft)</h3>
-            <h3>Construction area (sqft)</h3>
+            <h3>Land area (m<sup>2</sup>)</h3>
+            <h3>Construction area (m<sup>2</sup>)</h3>
             <Form.Item name="land_area">
               <InputNumber
                 style={{ width: "100%" }}

@@ -1,5 +1,7 @@
 import utility_token from 'utils/utility_token.json'
-import crowdsale_token from 'utils/crowdsale_token.json'
+import crowdsale from 'utils/crowdsale.json'
+import security_token from 'utils/security_token.json'
+import market_listing from 'utils/market_listing.json'
 
 export const blockchain = {
     aurora: {
@@ -65,7 +67,15 @@ export const contract = {
         address: '0x9809d9D94b0B3380db38b1e1a06047a2964e0041'
     },
     crowdsaleContract: {
-        abi: crowdsale_token.abi,
+        abi: crowdsale.abi,
         address: '0xa1d3a7778d7B2DF95D0485039bB875268f16541A'
+    },
+    securityContract: {
+        abi: security_token.abi,
+        address: '0xD2cfA0790CcE7dd980699F6F1F4A4f1D13cEBA9F'
+    },
+    marketListingContract: {
+        abi: market_listing.abi,
+        address: '0x5fd07722841350CAF86196Ae5f96a90f8A387055'
     }
 }

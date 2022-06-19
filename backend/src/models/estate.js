@@ -8,16 +8,17 @@ const registry = (data, resultCallback) => {
     const land_area = data.land_area;
     const construction_area = data.construction_area;
     const description = data.description;
-    const cid = data.cid;
+    const certificate_path = data.certificate_path;
+    const total_supply = data.total_supply;
 
     db.pool.query(`
         INSERT INTO property(
-            id, title, register_address, approval, description, location, land_area, construction_area, profit, ipfs_cid
+            id, title, register_address, approval, description, location, land_area, construction_area, profit, certificate_path, total_supply
         ) VALUES(
-            DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9
+            DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
         )
     `, [
-        title, register_address, 'pending', description, location, land_area, construction_area, profit, cid
+        title, register_address, 'pending', description, location, land_area, construction_area, profit, certificate_path, total_supply
     ], (err, res) => {
         if (err) {
             console.log(err)
@@ -124,20 +125,13 @@ const getList = (data, resultCallback) => {
 }
 
 const getInformation = (data, resultCallback) => {
-    const id = data.id;
+    const estate_id = data.estate_id;
 
-    db.pool.query('SELECT (\
-        id, \
-        title, \
-        location, \
-        invest_time, \
-        profit, \
-        total_supply, \
-        token_id\
-    ) FROM estate_meta WHERE id=$1', [
-        id
+    db.pool.query('SELECT * FROM property WHERE id=$1', [
+        estate_id
     ], (err, res) => {
         if (err) {
+            console.log(err)
             resultCallback(err, null);
             return;
         }

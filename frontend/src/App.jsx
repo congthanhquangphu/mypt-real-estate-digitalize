@@ -48,7 +48,7 @@ function App() {
               />
 
               <Route path="/token" element={<TokenPage />} />
-              <Route path="/estate/:id" element={<EstateDetailPage />} />
+              <Route path="/estate/:estate_id" element={<EstateDetailPage />} />
               <Route path="/estate_registry" element={<EstateRegistryPage />} />
 
               <Route path="/about_us" element={<AboutUsPage />} />

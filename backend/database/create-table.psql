@@ -1,8 +1,13 @@
+DROP TABLE IF EXISTS "property" CASCADE;
+DROP TABLE IF EXISTS "property_image" CASCADE;
+
 CREATE TABLE "property" (
   "id" serial PRIMARY KEY,
   "register_address" varchar,
   "title" varchar,
   "ipfs_cid" varchar,
+  "certificate_path" varchar,
+  "total_supply" int,
   "approval" varchar,
   "description" text,
   "location" varchar,
@@ -18,10 +23,4 @@ CREATE TABLE "property_image" (
   "is_primary" bool
 );
 
-CREATE TABLE "token" (
-  "token_id" int PRIMARY KEY,
-  "property_id" int
-);
-
 ALTER TABLE "property_image" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
-ALTER TABLE "token" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");

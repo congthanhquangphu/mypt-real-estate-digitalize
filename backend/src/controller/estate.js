@@ -9,7 +9,8 @@ const registry = (req, res) => {
         land_area: req.body.land_area,
         construction_area: req.body.construction_area,
         description: req.body.description,
-        cid: req.body.cid
+        total_supply: req.body.total_supply,
+        certificate_path: req.body.certificate_path
     }
     Estate.registry(data, (err, result) => {
         if (err) {
@@ -50,7 +51,7 @@ const upload = (req, res) => {
     res.send({
         exitcode: 0,
         message: "Upload file successfully",
-        cid: req.body.fileName
+        certificatePath: req.body.fileName
     })
 }
 
@@ -79,10 +80,29 @@ const getList = (req, res) => {
 
 const getInformation = (req, res) => {
     data = {
-        id: req.body.id
+        estate_id: req.body.estate_id
     }
     Estate.getInformation(data, (err, result) => {
+        if (err) {
+            res.send({
+                exitcode: 1,
+                message: "Cannot get information of estate"
+            })
+            return;
+        }
 
+        const { rows, rowCount } = result;
+        if (rowCount < 1) {
+            res.send({
+                exitcode: 101,
+                message: "Estate not found"
+            })
+        } else {
+            res.send({
+                exitcode: 0,
+                estate: rows[0]
+            })
+        }
     })
 }
 
