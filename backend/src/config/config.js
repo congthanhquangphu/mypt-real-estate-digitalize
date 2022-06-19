@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 exports.server = {
     port: 8080,
     noTokenUrl: [
@@ -8,13 +10,13 @@ exports.server = {
         '/estate/getList'
     ],
     expTime: 60 * 60 * 24,
-    secret: 'NPT'
+    secret: 'MYPT'
 }
 
 exports.database = {
     host: 'localhost',
     user: 'postgres',
-    password: '161026',
+    password: process.env.DATABASE_PASSWORD,
     database: 'mypt',
     port: "5432"
 }
