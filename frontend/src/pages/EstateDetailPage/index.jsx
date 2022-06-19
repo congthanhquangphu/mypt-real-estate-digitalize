@@ -3,21 +3,22 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getInformation } from "services/estate";
 import { message as AntMessage } from "antd";
+import VerificationCard from "components/VerificationCard";
 
 const EstateDetailPage = () => {
   const { estate_id } = useParams();
-  const [ estateDetail, setEstateDetail] = useState({});
+  const [estateDetail, setEstateDetail] = useState({});
 
   const fetchDetail = () => {
     const data = {
-      estate_id: estate_id
-    }
+      estate_id: estate_id,
+    };
     getInformation(data, (err, res) => {
       if (err) {
-        AntMessage.error("Cannot load estate information")
+        AntMessage.error("Cannot load estate information");
         return;
       }
-      
+
       setEstateDetail(res.data.estate);
     });
   };
@@ -28,7 +29,11 @@ const EstateDetailPage = () => {
 
   return (
     <div>
-      <EstateDetailCard {...estateDetail} />
+      <div className="flex flex-row gap-x-2 w-full">
+        <EstateDetailCard {...estateDetail} className="w-9/12" />
+        <VerificationCard className="w-3/12" estate_id={estate_id} />
+      </div>
+      <div className="flex flex-row"></div>
     </div>
   );
 };

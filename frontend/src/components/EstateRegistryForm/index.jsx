@@ -40,7 +40,7 @@ const EstateRegistryForm = ({ className }) => {
   const uploadProps = {
     name: "certificate",
     maxCount: 1,
-    action: "http://localhost:8080/estate/upload",
+    action: "http://localhost:8080/estate/uploadCertificate",
     accept: "application/pdf",
 
     onChange(info) {
@@ -57,7 +57,7 @@ const EstateRegistryForm = ({ className }) => {
 
   const onFinish = (data) => {
     data["register_address"] = currentAccount;
-    data["certificatePath"] = certificatePath;
+    data["certificate_path"] = certificatePath;
 
     estate.registry(data, (err, res) => {
       if (err) {

@@ -3,7 +3,6 @@ import defaultEstateImage from "res/default_real_estate.jpg";
 import { capitalizeFirstLetter } from "utils/utils";
 
 const EstateDetailCard = (props) => {
-  const estate_id = props.estate_id || 0;
   const image = props.image || defaultEstateImage;
   const title = props.title || "Title";
   const approval = props.approval || "";
@@ -15,24 +14,37 @@ const EstateDetailCard = (props) => {
   const cid = props.cid || "";
   const token_id = props.token_id || "";
   const total_supply = props.total_supply || 0;
+  const className = props.className;
 
   return (
-    <div className="p-4 w-fit flex flex-row rounded-xl bg-white">
-      <div className="m-2 h-[256px]">
+    <div className={`${className} p-4 w-full flex flex-row rounded-xl bg-white`}>
+      <div className="m-2 h-[256px] w-[256px]">
         <img
           src={image}
           alt="estate_image"
           className="h-full w-full rounded-xl"
         />
       </div>
-      <div className="px-6">
-        <div className="flex flex-row justify-between">
+      <div className="px-6 w-full">
+        <div className="flex flex-row justify-between w-full">
           <div>
             <h2>{title}</h2>
-            <span>
+            <div className="flex flex-row gap-x-2">
               <b>Approval: </b>
-              {capitalizeFirstLetter(approval)}
-            </span>
+              {approval === "pending" ? (
+                <div className="text-amber-600">
+                  {capitalizeFirstLetter(approval)}
+                </div>
+              ) : approval === "approved" ? (
+                <div className="text-green-600">
+                  {capitalizeFirstLetter(approval)}
+                </div>
+              ) : (
+                <div className="text-red-600">
+                  {capitalizeFirstLetter(approval)}
+                </div>
+              )}
+            </div>
           </div>
           <div className="p-2 rounded-xl h-fit bg-sky-600 text-white">
             {total_supply} parts

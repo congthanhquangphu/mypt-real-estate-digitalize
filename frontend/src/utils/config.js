@@ -54,11 +54,12 @@ export const blockchain = {
     }
 }
 
-export const aurorascan_api = "Z8ZRNGGQJI4S9YPPEFP8IXSWZC8WFDVI7I";
+export const aurorascan_token = "Z8ZRNGGQJI4S9YPPEFP8IXSWZC8WFDVI7I";
 
 export const constant = {
     item_per_page_marketplace: 10,
-    item_per_page_registry: 6
+    item_per_page_registry: 6,
+    admin: "0x938774a6e0f1ff890ef6d8e56f4a195b425d264e"
 }
 
 export const contract = {

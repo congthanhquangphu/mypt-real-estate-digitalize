@@ -1,4 +1,6 @@
 const Estate = require('models/estate')
+const web3storage = require('web3.storage')
+const config = require('config/config')
 
 const registry = (req, res) => {
     data = {
@@ -47,11 +49,60 @@ const getCount = (req, res) => {
     })
 }
 
-const upload = (req, res) => {
+const uploadCertificate = (req, res) => {
     res.send({
         exitcode: 0,
         message: "Upload file successfully",
         certificatePath: req.body.fileName
+    })
+}
+
+const uploadIPFS = (req, res) => {
+    const data = {
+        estate_id: req.body.estate_id
+    }
+    Estate.getCertificatePath(data, async (err, result) => {
+        if (err) {
+            res.send({
+                exitcode: 1,
+                message: "Cannot upload to IPFS"
+            })
+            return;
+        }
+
+        const { rowCount, rows } = result
+        if (rowCount < 1) {
+            res.send({
+                exitcode: 101,
+                message: "Estate not found"
+            })
+            return;
+        }
+
+        const { certificate_path } = rows[0]
+
+        const storage = new web3storage.Web3Storage({
+            token: config.constant.web3storage_token
+        })
+        let files = []
+
+        const certificates = await web3storage.getFilesFromPath(config.constant.upload_path);
+        for (const index in certificates) {
+            if (certificates[index].name.indexOf(certificate_path) != -1) {
+                files.push(certificates[index])
+                break;
+            }
+        }
+
+        console.log(`Uploading ${files.length} file(s)...`);
+        const cid = await storage.put(files);
+        console.log(`Uploading done: ${cid}`);
+
+        res.send({
+            exitcode: 0,
+            message: "Upload successfully",
+            cid: cid
+        })
     })
 }
 
@@ -109,7 +160,8 @@ const getInformation = (req, res) => {
 module.exports = {
     registry,
     getCount,
-    upload,
+    uploadCertificate,
     getList,
+    uploadIPFS,
     getInformation
 }

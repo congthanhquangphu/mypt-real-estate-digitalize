@@ -35,3 +35,21 @@ export const getInformation = async (data, callback) => {
         callback(err, null);
     }
 }
+
+export const uploadIPFS = async (data, callback) => {
+    try {
+        let res = await api.post("/estate/uploadIPFS", data);
+        callback(null, res);
+    } catch (err) {
+        callback(err, null);
+    }
+}
+
+export const mintToken = async (data, callback) => {
+    try {
+        let res = await api.post("/estate/acceptRegistry", data);
+        callback(null, res);
+    } catch (err) {
+        callback(err, null);
+    }
+}

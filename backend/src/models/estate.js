@@ -10,7 +10,7 @@ const registry = (data, resultCallback) => {
     const description = data.description;
     const certificate_path = data.certificate_path;
     const total_supply = data.total_supply;
-
+    console.log(certificate_path)
     db.pool.query(`
         INSERT INTO property(
             id, title, register_address, approval, description, location, land_area, construction_area, profit, certificate_path, total_supply
@@ -127,7 +127,11 @@ const getList = (data, resultCallback) => {
 const getInformation = (data, resultCallback) => {
     const estate_id = data.estate_id;
 
-    db.pool.query('SELECT * FROM property WHERE id=$1', [
+    db.pool.query(`
+        SELECT * 
+        FROM property 
+        WHERE id=$1
+    `, [
         estate_id
     ], (err, res) => {
         if (err) {
@@ -139,10 +143,29 @@ const getInformation = (data, resultCallback) => {
     })
 }
 
+const getCertificatePath = (data, resultCallback) => {
+    const estate_id = data.estate_id;
+    console.log(estate_id)
+    db.pool.query(`
+        SELECT certificate_path
+        FROM property
+        WHERE id=$1
+    `, [
+        estate_id
+    ], (err, res) => {
+        if (err) {
+            console.log(err)
+            resultCallback(err, null);
+            return;
+        }
+        resultCallback(null, res)
+    })
+}
 
 module.exports = {
     registry,
     getCount,
     getList,
+    getCertificatePath,
     getInformation
 }

@@ -2,7 +2,7 @@ import axios from "axios"
 import * as config from 'utils/config'
 
 export const fetchTransaction = async (address) => {
-    const res = await axios(`https://api-testnet.aurorascan.dev/api?module=account&action=tokentx&address=${address}&sort=desc&apikey=${config.aurorascan_api}`)
+    const res = await axios(`https://api-testnet.aurorascan.dev/api?module=account&action=tokentx&address=${address}&sort=desc&apikey=${config.aurorascan_token}`)
     const data = res.data.result.map((transaction) => {
         return {
             "hash": transaction.hash,
