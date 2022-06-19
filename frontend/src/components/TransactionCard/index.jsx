@@ -13,6 +13,8 @@ const TransactionCard = (props) => {
   const [isTransactionLoading, setIsTransactionLoading] = useState(false);
 
   const handleReload = async () => {
+    if (currentAccount==="") return;
+    
     setIsTransactionLoading(true);
     await fetchTransaction(currentAccount);
     setIsTransactionLoading(false);
