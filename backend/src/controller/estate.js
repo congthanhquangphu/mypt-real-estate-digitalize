@@ -1,6 +1,7 @@
 const Estate = require('models/estate')
 const web3storage = require('web3.storage')
 const config = require('config/config')
+require('dotenv').config()
 
 const registry = (req, res) => {
     data = {
@@ -82,7 +83,7 @@ const uploadIPFS = (req, res) => {
         const { certificate_path } = rows[0]
 
         const storage = new web3storage.Web3Storage({
-            token: config.constant.web3storage_token
+            token: process.env.WEB3STORAGE_TOKEN
         })
         let files = []
 
@@ -117,12 +118,13 @@ const getList = (req, res) => {
         if (err) {
             res.send({
                 exitcode: 1,
-                message: err
+                message: "Get list of estate failed"
             })
         }
         if (result) {
             res.send({
                 exitcode: 0,
+                message: "Get list of estate successfully",
                 estates: result.rows
             })
         }
@@ -151,6 +153,7 @@ const getInformation = (req, res) => {
         } else {
             res.send({
                 exitcode: 0,
+                message: "Get information successfully",
                 estate: rows[0]
             })
         }

@@ -21,5 +21,4 @@ exports.database = {
 
 exports.constant = {
     upload_path: "uploads/",
-    web3storage_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEFBNzA4ODVGNDFBZTFDNTg1MTc4MjgzZTdjOGNmODUyOWU2RWJhOWIiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NTU2MDk5NTMyOTgsIm5hbWUiOiJNWVBUIn0.8xSAOB_PWljGPULRS8ZaPchKgwykVxzyBgdPJGSpRSE"
 }

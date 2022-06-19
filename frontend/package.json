@@ -45,7 +45,10 @@
     ]
   },
   "compilerOptions": {
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "types": [
+      "node"
+    ]
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
