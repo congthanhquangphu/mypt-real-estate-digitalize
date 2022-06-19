@@ -7,8 +7,8 @@ Firstly, you need to install the [PostgreSQL](https://www.postgresql.org/) datab
 Before running the source code, you need API token to interact with your IPFS server. In this project, we use [Web3Storage IPFS](https://web3.storage/). Create a `.env` file in the folder which contains this file:
 
 ```bash
-WEB3STORAGE_TOKEN=<YOUR_API_TOKEN>
-DATABASE_PASSWORD=<YOUR_DATABASE_PASSWORD>
+WEB3STORAGE_TOKEN = <YOUR_API_TOKEN>
+DATABASE_PASSWORD = <YOUR_DATABASE_PASSWORD>
 ```
 
 ## Code exploration
