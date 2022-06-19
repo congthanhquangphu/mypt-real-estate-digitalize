@@ -62,7 +62,7 @@ const EstateDetailCard = (props) => {
             <b>Land area: </b> {land_area}m<sup>2</sup>
           </div>
           <div>
-            <b>Construction area (sqft): </b> {construction_area}m<sup>2</sup>
+            <b>Construction area: </b> {construction_area}m<sup>2</sup>
           </div>
         </div>
         <div className="my-2">

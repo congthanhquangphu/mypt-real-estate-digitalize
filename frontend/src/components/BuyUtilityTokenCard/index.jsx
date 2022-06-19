@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Button, Form, Input, InputNumber, message as AntMessage } from "antd";
+import { Button, Form, Input, InputNumber, notification } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
 import { useForm } from "antd/lib/form/Form";
 import { existEmpty } from "utils/utils";
@@ -55,11 +55,17 @@ const BuyUtilityTokenCard = ({ className }) => {
       const transaction = await withdrawUtilityToken(currentAccount);
       console.log(transaction);
       setIsWithdrawLoading(false);
-      AntMessage.success("Withdraw successfully");
+      notification["success"]({
+        message: "Withdraw utility token",
+        description: "Withdraw successfully",
+      });
 
       window.location.reload();
     } catch (err) {
-      AntMessage.error("Withdraw failed");
+      notification["error"]({
+        message: "Withdraw utility token",
+        description: "Withdraw failed",
+      });
     }
   };
 
@@ -76,9 +82,17 @@ const BuyUtilityTokenCard = ({ className }) => {
       console.log(transaction);
 
       setIsBuyLoading(false);
-      AntMessage.success("Buy successfully");
+
+      notification["success"]({
+        message: "Buy utility token",
+        description: "Buy successfully",
+      });
     } catch (err) {
-      AntMessage.error("Buy failed");
+      notification["error"]({
+        message: 'Buy utility token',
+        description:
+        "Buy failed"
+      });
     }
   };
 

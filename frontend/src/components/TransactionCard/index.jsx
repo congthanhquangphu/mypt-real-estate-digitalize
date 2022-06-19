@@ -35,6 +35,7 @@ const TransactionCard = (props) => {
   };
 
   useEffect(() => {
+    handleReload();
     refreshData();
   }, [currentAccount]);
 

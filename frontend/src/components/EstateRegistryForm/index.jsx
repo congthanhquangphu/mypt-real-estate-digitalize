@@ -1,13 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
-import {
-  message as AntMessage,
-  Button,
-  Input,
-  InputNumber,
-  Upload,
-  Form,
-} from "antd";
+import { notification, Button, Input, InputNumber, Upload, Form } from "antd";
 import MetamaskButton from "components/MetamaskButton";
 import { useForm } from "antd/lib/form/Form";
 import { existEmpty } from "utils/utils";
@@ -47,10 +40,16 @@ const EstateRegistryForm = ({ className }) => {
       const { status, response, name } = info.file;
       if (status === "done") {
         setCertificatePath(response.certificatePath);
-        AntMessage.success(`${name} file uploaded successfully.`);
+        notification["success"]({
+          message: "Upload certificate",
+          description: `${name} file uploaded successfully.`,
+        });
       } else if (status === "error") {
         setCertificatePath("");
-        AntMessage.error(`${name} file upload failed.`);
+        notification["error"]({
+          message: "Upload certificate",
+          description: `${name} file upload failed.`,
+        });
       }
     },
   };
@@ -61,11 +60,19 @@ const EstateRegistryForm = ({ className }) => {
 
     estate.registry(data, (err, res) => {
       if (err) {
-        AntMessage.error("Registry failed");
+        notification["error"]({
+          message: 'Registry estate',
+          description:
+          `Registry failed.`
+        });
         console.error(err);
         return;
       }
-      AntMessage.success("Registry successful");
+      notification["success"]({
+        message: 'Registry estate',
+        description:
+        `Registry successful.`
+      });
       form.resetFields();
       window.location.reload();
     });
@@ -108,8 +115,12 @@ const EstateRegistryForm = ({ className }) => {
             </Form.Item>
           </div>
           <div className="grid grid-cols-2 gap-x-2">
-            <h3>Land area (m<sup>2</sup>)</h3>
-            <h3>Construction area (m<sup>2</sup>)</h3>
+            <h3>
+              Land area (m<sup>2</sup>)
+            </h3>
+            <h3>
+              Construction area (m<sup>2</sup>)
+            </h3>
             <Form.Item name="land_area">
               <InputNumber
                 style={{ width: "100%" }}

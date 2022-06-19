@@ -1,8 +1,7 @@
-import { Button } from "antd";
+import { Button, notification } from "antd";
 import { MetamaskContext } from "context/MetamaskProvider";
 import React, { useEffect, useContext, useState } from "react";
 import { constant } from "utils/config";
-import { message as AntMessage } from "antd";
 import * as estate from "services/estate";
 
 const VerificationCard = (props) => {
@@ -19,7 +18,10 @@ const VerificationCard = (props) => {
 
     await estate.uploadIPFS({ estate_id: estate_id }, async (err, res) => {
       if (err) {
-        AntMessage.error("Cannot upload to IPFS");
+        notification["error"]({
+          message: "Upload to IPFS",
+          description: "Cannot upload to IPFS",
+        });
         return;
       }
 
@@ -41,12 +43,19 @@ const VerificationCard = (props) => {
 
       await estate.mintToken(data, (err, res) => {
         if (err) {
-          console.log(err)
-          AntMessage.error("Cannot mint token");
+          console.log(err);
+
+          notification["error"]({
+            message: "Mint token",
+            description: "Cannot mint tokens",
+          });
           return;
         }
-      
-        AntMessage.success("Verify successfully");
+
+        notification["success"]({
+          message: "Mint token",
+          description: "Verify successfully",
+        });
         window.location.reload();
       });
 
@@ -86,7 +95,7 @@ const VerificationCard = (props) => {
         )
       ) : (
         <div className="w-full flex justify-center items-center text-center p-4 h-3/4">
-          <h1 className="text-green-600">The estate was accepted</h1>
+          <h1 className="text-green-600">The estate was verified</h1>
         </div>
       )}
     </div>
