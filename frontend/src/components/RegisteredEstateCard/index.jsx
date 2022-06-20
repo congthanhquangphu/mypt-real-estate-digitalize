@@ -36,10 +36,12 @@ const RegisteredEstateCard = (props) => {
       };
       estate.getList(data, (err, res) => {
         if (err) return;
+        console.log(res.data.estates)
         setListEstate(res.data.estates);
       });
     });
   };
+
   return (
     <div
       className={`bg-white flex flex-col rounded-xl w-fit p-4 ${className}`}
@@ -65,6 +67,7 @@ const RegisteredEstateCard = (props) => {
                   title={element.title}
                   location={element.location}
                   profit={element.profit}
+                  totalSupply={element.total_supply}
                 />
               );
             })}

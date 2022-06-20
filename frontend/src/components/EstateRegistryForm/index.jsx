@@ -101,7 +101,7 @@ const EstateRegistryForm = ({ className }) => {
           </div>
           <div className="grid grid-cols-2 gap-x-2">
             <h3>Location</h3>
-            <h3>Profit (APY)</h3>
+            <h3>Profit (Annual percentage yield)</h3>
             <Form.Item name="location">
               <Input size="large" placeholder="City" />
             </Form.Item>

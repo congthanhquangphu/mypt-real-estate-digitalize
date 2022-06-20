@@ -11,6 +11,7 @@ const BasicEstateItem = (props) => {
   const profit = props.profit || 0;
   const approval = props.approval || "pending";
   const className = props.className || "";
+  const totalSupply = props.totalSupply || 0;
   const children = props.children;
 
   const navigator = useNavigate();
@@ -46,6 +47,8 @@ const BasicEstateItem = (props) => {
         <div>{location}</div>
         <b>Profit expectation:</b>
         <div>{profit}% APR</div>{" "}
+        <b>Total supply:</b>
+        <div>{totalSupply} tokens</div>
       </div>
       {children && (
         <>

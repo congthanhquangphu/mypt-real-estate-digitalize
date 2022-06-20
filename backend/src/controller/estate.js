@@ -1,7 +1,6 @@
 const Estate = require('models/estate')
 const web3storage = require('web3.storage')
 const config = require('config/config')
-require('dotenv').config()
 
 const registry = (req, res) => {
     data = {

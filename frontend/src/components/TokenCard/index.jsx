@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import * as config from "utils/config";
 import BasicEstateItem from "components/BasicEstateItem";
+import * as Estate from "services/estate";
 
 const TokenCard = () => {
   const { currentAccount, getSecurityOwnedTokenCount, getSecurityOwnedToken } =
@@ -21,7 +22,23 @@ const TokenCard = () => {
       item_per_page_token,
       (page - 1) * item_per_page_token
     );
-    setTokens(result);
+
+    const listToken = [];
+    for (const index in result) {
+      const data = {
+        estate_id: result[index].token_id,
+      };
+      await Estate.getInformation(data, (err, res) => {
+        if (err) throw Error("Estate not found");
+
+        listToken.push({
+          ...result[index],
+          ...res.data.estate,
+        });
+      });
+    }
+
+    setTokens(listToken);
   };
 
   const handlePageChange = (e) => {
@@ -47,10 +64,18 @@ const TokenCard = () => {
         ) : (
           <div className="grid grid-cols-5 gap-x-2 w-full">
             {tokens.map((token) => (
-              <BasicEstateItem {...token}>
+              <BasicEstateItem
+                className="m-1"
+                key={token.id}
+                id={token.id}
+                approval={token.approval}
+                title={token.title}
+                location={token.location}
+                profit={token.profit}
+                totalSupply={token.total_supply}
+              >
                 <div className="grid grid-cols-2 text-left p-2">
                   <b>Token ID:</b> {token.token_id}
-                  <b>Total supply: </b> 1000 tokens
                   <b>Amount: </b> {token.balance} tokens
                 </div>
               </BasicEstateItem>
