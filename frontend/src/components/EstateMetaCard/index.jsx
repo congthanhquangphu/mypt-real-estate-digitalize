@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import { Button, Modal } from "antd";
+import TokenSellCard from "components/TokenSellCard";
+import React, { useEffect, useState } from "react";
 import defaultEstateImage from "res/default_real_estate.jpg";
 import { capitalizeFirstLetter } from "utils/utils";
 
-const EstateDetailCard = (props) => {
+const EstateMetaCard = (props) => {
   const image = props.image || defaultEstateImage;
   const title = props.title || "Title";
   const approval = props.approval || "";
@@ -15,15 +17,28 @@ const EstateDetailCard = (props) => {
   const token_id = props.token_id || "";
   const total_supply = props.total_supply || 0;
   const className = props.className;
+  const balance = props.balance || 0;
+
+  const [openSellModal, setOpenSellModal] = useState(false);
+
+  const handleSell = () => {
+    setOpenSellModal(true);
+  };
+
+  const handleOk = () => {
+    setOpenSellModal(false);
+  };
+
+  const handleCancel = () => {
+    setOpenSellModal(false);
+  };
 
   return (
-    <div className={`${className} p-4 w-full flex flex-row rounded-xl bg-white`}>
-      <div className="m-2 h-[256px] w-[256px]">
-        <img
-          src={image}
-          alt="estate_image"
-          className="h-full w-full rounded-xl"
-        />
+    <div
+      className={`${className} p-4 w-full h-full flex flex-row rounded-xl bg-white`}
+    >
+      <div className="m-2 max-h-[300px] max-w-[300px]">
+        <img src={image} alt="estate_image" className="h-full rounded-xl" />
       </div>
       <div className="px-6 w-full">
         <div className="flex flex-row justify-between w-full">
@@ -46,7 +61,7 @@ const EstateDetailCard = (props) => {
               )}
             </div>
           </div>
-          <div className="p-2 rounded-xl h-fit bg-sky-600 text-white">
+          <div className="p-2 rounded-xl h-fit w-[128px] text-center bg-sky-600 text-white">
             {total_supply} parts
           </div>
         </div>
@@ -69,17 +84,43 @@ const EstateDetailCard = (props) => {
           <b>Description: </b> {description}
         </div>
         <hr className="my-2" />
-        <div>
+        <div className="flex flex-row justify-between items-end">
           <div>
-            <b>Token ID:</b> {token_id}
+            <div>
+              <b>Token ID:</b> {token_id}
+            </div>
+            <div>
+              <b>CID:</b>{" "}
+              <a target="blank" href={`https://${cid}.ipfs.dweb.link/`}>
+                {cid}
+              </a>
+            </div>
+            <div>
+              <b>Balance:</b> {balance} tokens
+            </div>
           </div>
-          <div>
-            <b>CID:</b> <a target="blank" href={`https://${cid}.ipfs.dweb.link/`}>{cid}</a>
-          </div>
+          {balance > 0 && (
+            <Button
+              shape="round"
+              onClick={handleSell}
+              size="large"
+              style={{
+                backgroundColor: "green",
+                width: "128px",
+                color: "white",
+              }}
+            >
+              Sell
+            </Button>
+          )}
         </div>
       </div>
+
+      <Modal visible={openSellModal} onOk={handleOk} onCancel={handleCancel}>
+        <TokenSellCard />
+      </Modal>
     </div>
   );
 };
 
-export default EstateDetailCard;
+export default EstateMetaCard;

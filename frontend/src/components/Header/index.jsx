@@ -33,8 +33,9 @@ const menuItem = [
   // getItem("About us", "about_us"),
 ];
 
-const Header = ({className}) => {
+const Header = (props) => {
   let navigate = useNavigate();
+  const className = props.className || "";
 
   // const logout = () => {
   //   localStorage.removeItem("token");
@@ -42,7 +43,9 @@ const Header = ({className}) => {
   // };
 
   return (
-    <header className={className}>
+    <header
+      className={`${className} flex ant-menu ant-menu-dark justify-between flex-row items-center`}
+    >
       <div className="mt-5 w-full">
         <Menu
           mode="horizontal"

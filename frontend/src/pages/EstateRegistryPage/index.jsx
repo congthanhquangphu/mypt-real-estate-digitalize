@@ -3,7 +3,6 @@ import RegisteredEstateCard from "components/RegisteredEstateCard";
 import React from "react";
 
 const EstateRegistryPage = () => {
-
   return (
     <div className="flex flex-row gap-x-2 min-h-[80%] justify-center w-full">
       <EstateRegistryForm className="w-4/12 min-h-full" />

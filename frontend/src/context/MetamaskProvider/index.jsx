@@ -149,8 +149,8 @@ export const MetamaskProvider = ({ children }) => {
       const securityContract = getSecurityContract();
       const addresses = ids.map((_) => currentAccount);
       const balances = await securityContract.balanceOfBatch(addresses, ids);
-      const result = balances.map(
-        (balance) => parseInt(ethers.utils.formatEther(balance) * Math.pow(10, 18))
+      const result = balances.map((balance) =>
+        parseInt(ethers.utils.formatEther(balance) * Math.pow(10, 18))
       );
       return result;
     } catch (err) {
@@ -295,6 +295,7 @@ export const MetamaskProvider = ({ children }) => {
         withdrawUtilityToken,
         mintToken,
         getSecurityOwnedToken,
+        getSecurityTokenBatch,
         currentAccount,
         currentBalance,
         currentUtilityBalance,

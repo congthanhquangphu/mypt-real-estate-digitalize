@@ -1,80 +1,57 @@
-import React from "react";
-import { Button, Dropdown, Menu, Space, Input, message } from "antd";
+import React, { useState } from "react";
+import { Button, Select, InputNumber } from "antd";
 import MetamaskButton from "components/MetamaskButton";
-import { DownOutlined } from "@ant-design/icons";
+import { capitalizeFirstLetter } from "utils/utils";
 
-const handleMenuClick = (e) => {
-  message.info("Click on menu item.");
-  console.log("click", e);
-};
-
-const sellTypeMenu = (
-  <Menu
-    onClick={handleMenuClick}
-    items={[
-      {
-        label: "Listing",
-        key: "listing",
-      },
-      {
-        label: "Crowdfunding",
-        key: "crowdfunding",
-      },
-      {
-        label: "Bidding",
-        key: "bidding",
-      },
-      {
-        label: "Swap",
-        key: "swap",
-      },
-    ]}
-  />
-);
-
-const tokenMenu = (
-  <Menu
-    items={[
-      {
-        key: "REUT",
-        label: "REUT",
-      },
-    ]}
-  />
-);
+const { Option } = Select;
+const sellTypeMenu = ["listing", "crowdfunding", "bidding", "swap"];
 
 const TokenSellCard = (props) => {
+  const className = props.className || "";
+  const balance = props.balance || 0;
+
+  const [sellType, setSellType] = useState(null);
+  const [amount, setAmount] = useState(0);
+
+  const handleAmountChange = (e) => {
+    setAmount(e);
+  };
+
+  const handleSellTypeChange = (e) => {
+    setSellType(e);
+  };
+
   return (
-    <div className="p-5 bg-white w-full rounded-xl">
+    <div className={`${className} p-5 bg-white h-full w-full rounded-xl`}>
       <h1>Selling form</h1>
       <hr className="m-2" />
-      <div className="m-2"></div>
-      <div className="grid grid-cols-3 gap-x-2">
+
+      <div className="grid grid-cols-2 gap-x-2">
         <div>
           <h3>Sell type</h3>
-          <Dropdown overlay={sellTypeMenu} size="large">
-            <Button>
-              <Space>
-                Choose sell type
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-        </div>
-        <div>
-          <h3>Token</h3>
-          <Dropdown overlay={tokenMenu}>
-            <Button>
-              <Space>
-                Choose token
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
+          <Select
+            value={sellType}
+            style={{ width: 120 }}
+            onChange={handleSellTypeChange}
+          >
+            {sellTypeMenu.map((item) => (
+              <Option key={item} value={item}>
+                {capitalizeFirstLetter(item)}
+              </Option>
+            ))}
+          </Select>
         </div>
         <div>
           <h3>Amount</h3>
-          <Input size="large" placeholder="Amount" />
+          <InputNumber
+            style={{ width: "100%" }}
+            value={amount}
+            min={0}
+            max={balance}
+            onChange={handleAmountChange}
+            size="large"
+            placeholder="Amount"
+          />
         </div>
       </div>
       <MetamaskButton className="m-2 w-full" />

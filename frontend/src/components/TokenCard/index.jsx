@@ -1,5 +1,5 @@
 import { MetamaskContext } from "context/MetamaskProvider";
-import { Pagination } from "antd";
+import { Pagination, Spin } from "antd";
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import * as config from "utils/config";
@@ -12,8 +12,11 @@ const TokenCard = () => {
   const [page, setPage] = useState(1);
   const [totalToken, setTotalToken] = useState(0);
   const [tokens, setTokens] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
+    setLoading(true);
+
     const count = await getSecurityOwnedTokenCount();
     setTotalToken(count);
 
@@ -39,6 +42,7 @@ const TokenCard = () => {
     }
 
     setTokens(listToken);
+    setLoading(false);
   };
 
   const handlePageChange = (e) => {
@@ -60,6 +64,10 @@ const TokenCard = () => {
         {currentAccount === "" ? (
           <div className="flex flex-col items-center justify-center">
             <h2>Please connect your wallet to view tokens</h2>
+          </div>
+        ) : loading ? (
+          <div className="flex flex-col items-center justify-center">
+            <Spin size="large" />
           </div>
         ) : (
           <div className="grid grid-cols-5 gap-x-2 w-full">

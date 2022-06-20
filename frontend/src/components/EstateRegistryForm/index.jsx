@@ -61,17 +61,15 @@ const EstateRegistryForm = ({ className }) => {
     estate.registry(data, (err, res) => {
       if (err) {
         notification["error"]({
-          message: 'Registry estate',
-          description:
-          `Registry failed.`
+          message: "Registry estate",
+          description: `Registry failed.`,
         });
         console.error(err);
         return;
       }
       notification["success"]({
-        message: 'Registry estate',
-        description:
-        `Registry successful.`
+        message: "Registry estate",
+        description: `Registry successful.`,
       });
       form.resetFields();
       window.location.reload();
@@ -101,7 +99,10 @@ const EstateRegistryForm = ({ className }) => {
           </div>
           <div className="grid grid-cols-2 gap-x-2">
             <h3>Location</h3>
-            <h3>Profit (Annual percentage yield)</h3>
+            <h3>
+              Profit <br />
+              (Annual percentage yield)
+            </h3>
             <Form.Item name="location">
               <Input size="large" placeholder="City" />
             </Form.Item>

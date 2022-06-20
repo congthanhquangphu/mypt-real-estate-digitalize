@@ -25,6 +25,11 @@ const VerificationCard = (props) => {
         return;
       }
 
+      notification["success"]({
+        message: "Upload to IPFS",
+        description: "Done upload to IPFS",
+      });
+
       const cid = res.data.cid;
       const token_id = estate_id;
       const transaction = await mintToken(
