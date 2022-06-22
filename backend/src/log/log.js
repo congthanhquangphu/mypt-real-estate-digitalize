@@ -1,4 +1,4 @@
-const log = (req, res, next) => {
+export default function log(req, res, next) {
     const currentDateTime = new Date();
     const year = currentDateTime.getFullYear()
     const month = currentDateTime.getMonth() + 1
@@ -16,7 +16,3 @@ const log = (req, res, next) => {
     next()
 }
 
-
-module.exports = {
-    log
-}

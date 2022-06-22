@@ -54,10 +54,6 @@ const TokenSellCard = (props) => {
           />
         </div>
       </div>
-      <MetamaskButton className="m-2 w-full" />
-      <Button shape="round" type="primary" className="w-full m-2" size="large">
-        Submit
-      </Button>
     </div>
   );
 };

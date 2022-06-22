@@ -1,21 +1,19 @@
-require('module-alias/register')
-require('dotenv').config()
-const   express = require('express')
-        app = express()
-        route = require('routes/routes')
-        config = require('config/config')
-        cors = require('cors')
-        log = require('log/log')
-        auth = require('auth/auth')
+import express from 'express'
+import cors from 'cors'
+import route from '#src/routes/routes'
+import config from '#src/config/config'
+import log from '#src/log/log'
+// import auth from '#src/auth/auth'
+
+const app = express()
 
 //==================== Library =======================
 
-//#region middleware
-
+// #region middleware
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
-app.use(log.log)
+app.use(log)
 // app.use(auth.auth)
 route.assignRoutes(app)
 

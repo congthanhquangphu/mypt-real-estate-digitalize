@@ -1,11 +1,9 @@
-const accountRoutes = require('./account')
-const estateRoutes = require('./estate')
+import account from '#src/routes/account'
+import estate from '#src/routes/estate'
 
-const assignRoutes = (app) =>{
-    accountRoutes.assignRoutes(app)
-    estateRoutes.assignRoutes(app)
-}
-
-module.exports = {
-    assignRoutes
+export default {
+    assignRoutes(app) {
+        account.assignRoutes(app)
+        estate.assignRoutes(app)
+    }
 }

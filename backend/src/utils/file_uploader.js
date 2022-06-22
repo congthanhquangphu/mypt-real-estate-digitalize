@@ -1,5 +1,5 @@
-const config = require('config/config')
-const multer = require('multer')
+import config from '#src/config/config'
+import multer from 'multer'
 
 const storage = multer.diskStorage({
     destination: config.constant.upload_path,
@@ -11,6 +11,4 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-module.exports = {
-    upload
-}
+export default upload;
