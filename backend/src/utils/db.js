@@ -1,5 +1,9 @@
-import pg from 'pg'
 import config from '#src/config/config'
-const pool = new pg.Pool(config.database)
+import knex from 'knex'
 
-export default pool;
+const pg = knex({
+    client: 'pg',
+    connection: config.database,
+});
+
+export default pg 

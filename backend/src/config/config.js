@@ -4,15 +4,15 @@ dotenv.config();
 const config = {
     server: {
         port: 8080,
-        noTokenUrl: [
+        no_token_url: [
             '/account/signup',
             '/account/login',
             '/estate/getCount',
             '/estate/getInformation',
             '/estate/getList'
         ],
-        expTime: 60 * 60 * 24,
-        secret: 'MYPT'
+        exp_time: 60 * 60 * 24,
+        secret: process.env.JWT_SECRET
     },
 
     database: {
@@ -21,6 +21,10 @@ const config = {
         password: process.env.DATABASE_PASSWORD,
         database: 'mypt',
         port: "5432"
+    },
+
+    key: {
+        web3storage_token: process.env.WEB3STORAGE_TOKEN,
     },
 
     constant: {

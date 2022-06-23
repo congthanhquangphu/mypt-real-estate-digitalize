@@ -3,93 +3,86 @@ import { Web3Storage, getFilesFromPath } from 'web3.storage'
 import config from '#src/config/config'
 
 export default {
-    registry(req, res) {
-        const data = {
-            title: req.body.title,
-            register_address: req.body.register_address,
-            location: req.body.location,
-            profit: req.body.profit,
-            land_area: req.body.land_area,
-            construction_area: req.body.construction_area,
-            description: req.body.description,
-            total_supply: req.body.total_supply,
-            certificate_path: req.body.certificate_path
+
+    async registry(req, res) {
+        const {
+            title,
+            register_address,
+            location,
+            profit,
+            land_area,
+            construction_area,
+            description,
+            total_supply,
+            certificate_path
+        } = req.body;
+        const entity = {
+            title,
+            register_address,
+            location,
+            profit,
+            land_area,
+            construction_area,
+            description,
+            total_supply,
+            certificate_path,
         }
-        estate.registry(data, (err, result) => {
-            if (err) {
-                res.send({
-                    exitcode: 1,
-                    message: err
-                })
-                return;
-            }
+        try {
+            estate.registry(entity)
+
             res.send({
                 exitcode: 0,
                 message: "Registry successfully"
             })
-        })
+        } catch (err) {
+            console.error(err)
+            res.send({
+                exitcode: 1,
+                message: err
+            })
+        }
     },
 
-    getCount(req, res) {
-        const data = {
-            register_address: req.body.register_address || "",
-            approval: req.body.approval
-        }
-        estate.getCount(data, (err, result) => {
-            if (err) {
-                res.send({
-                    exitcode: 1,
-                    message: err
-                })
-                return;
-            }
+    async getCount(req, res) {
+        const { register_address, approval } = req.body;
+        try {
+            const result = await estate.countByRegister(register_address, approval)
             res.send({
                 exitcode: 0,
-                count: result.rows[0].count,
+                count: result,
             })
-        })
+        } catch (err) {
+            console.error(err)
+            res.send({
+                exitcode: 1,
+                message: err
+            })
+        }
     },
 
     uploadCertificate(req, res) {
+        const { fileName } = req.body
         res.send({
             exitcode: 0,
             message: "Upload file successfully",
-            certificatePath: req.body.fileName
+            certificatePath: fileName
         })
     },
 
-    uploadIPFS(req, res) {
-        const data = {
-            estate_id: req.body.estate_id
-        }
-        estate.getCertificatePath(data, async (err, result) => {
-            if (err) {
-                res.send({
-                    exitcode: 1,
-                    message: "Cannot upload to IPFS"
-                })
-                return;
-            }
+    async uploadIPFS(req, res) {
+        const { estate_id } = req.body
 
-            const { rowCount, rows } = result
-            if (rowCount < 1) {
-                res.send({
-                    exitcode: 101,
-                    message: "Estate not found"
-                })
-                return;
-            }
-
-            const { certificate_path } = rows[0]
+        try {
+            const path = await estate.getCertificatePathById(estate_id);
 
             const storage = new Web3Storage({
-                token: process.env.WEB3STORAGE_TOKEN
+                token: config.key.web3storage_token
             })
             let files = []
 
             const certificates = await getFilesFromPath(config.constant.upload_path);
             for (const index in certificates) {
-                if (certificates[index].name.indexOf(certificate_path) != -1) {
+                if (certificates[index].name.indexOf(path) != -1) {
                     files.push(certificates[index])
                     break;
                 }
@@ -104,82 +97,66 @@ export default {
                 message: "Upload successfully",
                 cid: cid
             })
-        })
+        } catch (err) {
+            console.error(err)
+            res.send({
+                exitcode: 1,
+                message: "Cannot upload to IPFS"
+            })
+        }
     },
 
-    getList(req, res) {
-        const data = {
-            register_address: req.body.register_address || "",
-            approval: req.body.approval,
-            limit: req.body.limit,
-            offset: req.body.offset,
+    async getList(req, res) {
+        const { register_address, approval, limit, offset } = req.body;
+        try {
+            const estateList = await estate.getByRegister(register_address, approval, limit, offset);
+            res.send({
+                exitcode: 0,
+                message: "Get list of estate successfully",
+                estates: estateList
+            })
+        } catch (err) {
+            console.error(err)
+            res.send({
+                exitcode: 1,
+                message: "Get list of estate failed"
+            })
         }
-        estate.getList(data, (err, result) => {
-            if (err) {
-                res.send({
-                    exitcode: 1,
-                    message: "Get list of estate failed"
-                })
-            }
-            if (result) {
-                res.send({
-                    exitcode: 0,
-                    message: "Get list of estate successfully",
-                    estates: result.rows
-                })
-            }
-        })
     },
 
-    getInformation(req, res) {
-        const data = {
-            estate_id: req.body.estate_id
+    async getInformation(req, res) {
+        const { estate_id } = req.body
+        try {
+            const result = await estate.getById(estate_id);
+            console.log(result)
+            return res.send({
+                exitcode: 0,
+                message: "Get information successfully",
+                estate: result
+            })
+        } catch (err) {
+            console.error(err)
+            res.send({
+                exitcode: 1,
+                message: "Cannot get information of estate"
+            })
         }
-        estate.getInformation(data, (err, result) => {
-            if (err) {
-                res.send({
-                    exitcode: 1,
-                    message: "Cannot get information of estate"
-                })
-                return;
-            }
-
-            const { rows, rowCount } = result;
-            if (rowCount < 1) {
-                res.send({
-                    exitcode: 101,
-                    message: "Estate not found"
-                })
-            } else {
-                res.send({
-                    exitcode: 0,
-                    message: "Get information successfully",
-                    estate: rows[0]
-                })
-            }
-        })
     },
 
-    acceptRegistry(req, res) {
-        const data = {
-            estate_id: req.body.estate_id,
-            cid: req.body.cid,
-            token_id: req.body.token_id
-        }
-        estate.acceptRegistry(data, (err, result) => {
-            console.log(result, err)
-            if (err) {
-                res.send({
-                    exitcode: 1,
-                    message: "Cannot update estate registry"
-                })
-                return;
-            }
-
+    async acceptRegistry(req, res) {
+        const { estate_id, cid, token_id } = req.body;
+        try {
+            const result = await estate.acceptRegistry(estate_id, token_id, cid);
             res.send({
                 exitcode: 0,
                 message: "Update estate successfully"
             })
-        })
+        } catch (err) {
+            console.error(err);
+            res.send({
+                exitcode: 1,
+                message: "Cannot update estate registry"
+            })
+        }
     }
 }

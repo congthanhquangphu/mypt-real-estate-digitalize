@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS "property" CASCADE;
-DROP TABLE IF EXISTS "property_image" CASCADE;
+DROP TABLE IF EXISTS "estate" CASCADE;
+DROP TABLE IF EXISTS "estate_image" CASCADE;
 
-CREATE TABLE "property" (
+CREATE TABLE "estate" (
   "id" serial PRIMARY KEY,
   "register_address" varchar,
   "title" varchar,
@@ -17,11 +17,11 @@ CREATE TABLE "property" (
   "profit" real
 );
 
-CREATE TABLE "property_image" (
+CREATE TABLE "estate_image" (
   "id" serial PRIMARY KEY,
-  "property_id" int,
+  "estate_id" int,
   "path" varchar,
   "is_primary" bool
 );
 
-ALTER TABLE "property_image" ADD FOREIGN KEY ("property_id") REFERENCES "property" ("id");
+ALTER TABLE "estate_image" ADD FOREIGN KEY ("estate_id") REFERENCES "estate" ("id");

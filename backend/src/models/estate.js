@@ -2,185 +2,54 @@ import db from '#src/utils/db'
 
 export default {
 
-    registry(data, resultCallback) {
-        const title = data.title;
-        const location = data.location;
-        const register_address = data.register_address;
-        const profit = data.profit;
-        const land_area = data.land_area;
-        const construction_area = data.construction_area;
-        const description = data.description;
-        const certificate_path = data.certificate_path;
-        const total_supply = data.total_supply;
-        console.log(certificate_path)
-        db.query(`
-            INSERT INTO property(
-                id, title, register_address, approval, description, location, land_area, construction_area, profit, certificate_path, total_supply
-            ) VALUES(
-                DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
-            )
-        `, [
-            title, register_address, 'pending', description, location, land_area, construction_area, profit, certificate_path, total_supply
-        ], (err, res) => {
-            if (err) {
-                console.log(err)
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res)
-        })
+    async registry(entity) {
+        entity['approval'] = 'pending';
+
+        return await db('estate').insert(entity);
     },
 
-    getCountByApproval(data, resultCallback) {
-        const register_address = data.register_address;
-        const approval = data.approval;
-
-        db.query(`
-            SELECT count(*) 
-            FROM PROPERTY
-            WHERE register_address=$1
-            AND approval=$2`, [
-            register_address, approval
-        ], (err, res) => {
-            if (err) {
-                console.log(err)
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res);
-        })
-    },
-
-    getCount(data, resultCallback) {
-        const register_address = data.register_address;
-        const approval = data.approval;
-
+    async countByRegister(registerAddress, approval) {
+        const data = {
+            'register_address': registerAddress,
+        };
         if (approval) {
-            getCountByApproval(data);
-            return;
+            data['approval'] = approval;
         }
-
-        db.query(`
-            SELECT count(*) 
-            FROM PROPERTY
-            WHERE register_address=$1`, [
-            register_address
-        ], (err, res) => {
-            if (err) {
-                console.log(err)
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res);
-        })
+        const result = await db('estate').count('*').where(data)
+        return result[0].count;
     },
 
-    getListByApproval(data, resultCallback) {
-        const register_address = data.register_address;
-        const approval = data.approval;
-        const offset = data.offset;
-        const limit = data.limit;
-
-        db.query(`
-            SELECT * 
-            FROM PROPERTY p
-            WHERE register_address=$1
-            AND approval=$2
-            OFFSET $3
-            LIMIT $4`, [
-            register_address, approval, offset, limit
-        ], (err, res) => {
-            if (err) {
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res);
-        })
-    },
-
-    getList(data, resultCallback) {
-        const register_address = data.register_address;
-        const approval = data.approval;
-        const offset = data.offset;
-        const limit = data.limit;
-
+    async getByRegister(registerAddress, offset, limit, approval) {
+        const data = {
+            'register_address': registerAddress,
+        }
         if (approval) {
-            getListByApproval(data, resultCallback);
-            return;
+            data['approval'] = approval
         }
-
-        db.query(`
-            SELECT * 
-            FROM PROPERTY p
-            WHERE register_address=$1
-            OFFSET $2
-            LIMIT $3`, [
-            register_address, offset, limit
-        ], (err, res) => {
-            if (err) {
-                console.error(err)
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res);
-        })
+        return await db('estate').where(data).offset(offset).limit(limit);
     },
 
-    getInformation(data, resultCallback) {
-        const estate_id = data.estate_id;
-
-        db.query(`
-            SELECT * 
-            FROM property 
-            WHERE id=$1
-        `, [
-            estate_id
-        ], (err, res) => {
-            if (err) {
-                console.log(err)
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res);
+    async getById(estateId) {
+        const result = await db('estate').where({
+            'id': estateId
         })
+        return result[0] || null;
     },
 
-    getCertificatePath(data, resultCallback) {
-        const estate_id = data.estate_id;
-        console.log(estate_id)
-        db.query(`
-            SELECT certificate_path
-            FROM property
-            WHERE id=$1
-        `, [
-            estate_id
-        ], (err, res) => {
-            if (err) {
-                console.log(err)
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res)
+    async getCertificatePathById(estateId) {
+        const result = await db('estate').select('certificate_path').where({
+            'id': estateId
         })
+        return result[0].certificate_path || null;
     },
 
-    acceptRegistry(data, resultCallback) {
-        const estate_id = data.estate_id
-        const token_id = data.token_id
-        const cid = data.cid
-
-        db.query(`
-            UPDATE property
-            SET token_id = $1, ipfs_cid = $2, approval='approved'
-            WHERE id = $3
-        `, [
-            token_id, cid, estate_id
-        ], (err, res) => {
-            if (err) {
-                resultCallback(err, null);
-                return;
-            }
-            resultCallback(null, res)
+    async acceptRegistry(estateId, tokenId, cid) {
+        await db('estate').where({
+            "id": estateId
+        }).update({
+            "token_id": tokenId,
+            "approval": "approved",
+            "ipfs_cid": cid
         })
     }
 }
