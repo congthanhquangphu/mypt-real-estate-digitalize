@@ -69,7 +69,7 @@ const RegisteredEstateCard = (props) => {
                   title={element.title}
                   location={element.location}
                   profit={element.profit}
-                  totalSupply={element.total_supply}
+                  totalSupply={element.totalSupply}
                 />
               );
             })}

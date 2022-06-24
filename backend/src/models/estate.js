@@ -10,7 +10,7 @@ export default {
 
     async countByRegister(registerAddress, approval) {
         const data = {
-            'register_address': registerAddress,
+            'registerAddress': registerAddress,
         };
         if (approval) {
             data['approval'] = approval;
@@ -19,9 +19,9 @@ export default {
         return result[0].count;
     },
 
-    async getByRegister(registerAddress, offset, limit, approval) {
+    async getByRegister(registerAddress, approval, limit, offset) {
         const data = {
-            'register_address': registerAddress,
+            'registerAddress': registerAddress,
         }
         if (approval) {
             data['approval'] = approval
@@ -37,19 +37,19 @@ export default {
     },
 
     async getCertificatePathById(estateId) {
-        const result = await db('estate').select('certificate_path').where({
+        const result = await db('estate').select('certificatePath').where({
             'id': estateId
         })
-        return result[0].certificate_path || null;
+        return result[0].certificatePath || null;
     },
 
     async acceptRegistry(estateId, tokenId, cid) {
         await db('estate').where({
             "id": estateId
         }).update({
-            "token_id": tokenId,
+            "tokenId": tokenId,
             "approval": "approved",
-            "ipfs_cid": cid
+            "ipfsCid": cid
         })
     }
 }

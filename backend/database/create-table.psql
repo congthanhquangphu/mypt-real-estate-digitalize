@@ -1,27 +1,27 @@
 DROP TABLE IF EXISTS "estate" CASCADE;
-DROP TABLE IF EXISTS "estate_image" CASCADE;
+DROP TABLE IF EXISTS "estateImage" CASCADE;
 
 CREATE TABLE "estate" (
   "id" serial PRIMARY KEY,
-  "register_address" varchar,
+  "registerAddress" varchar,
   "title" varchar,
-  "token_id" varchar,
-  "ipfs_cid" varchar,
-  "certificate_path" varchar,
-  "total_supply" int,
+  "tokenId" varchar,
+  "ipfsCid" varchar,
+  "certificatePath" varchar,
+  "totalSupply" int,
   "approval" varchar,
   "description" text,
   "location" varchar,
-  "land_area" real,
-  "construction_area" real,
+  "landArea" real,
+  "constructionArea" real,
   "profit" real
 );
 
-CREATE TABLE "estate_image" (
+CREATE TABLE "estateImage" (
   "id" serial PRIMARY KEY,
-  "estate_id" int,
+  "estateId" int,
   "path" varchar,
-  "is_primary" bool
+  "isPrimary" bool
 );
 
-ALTER TABLE "estate_image" ADD FOREIGN KEY ("estate_id") REFERENCES "estate" ("id");
+ALTER TABLE "estateImage" ADD FOREIGN KEY ("estateId") REFERENCES "estate" ("id");

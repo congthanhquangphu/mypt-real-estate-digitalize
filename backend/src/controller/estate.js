@@ -3,7 +3,6 @@ import { Web3Storage, getFilesFromPath } from 'web3.storage'
 import config from '#src/config/config'
 
 export default {
-
     async registry(req, res) {
         const {
             title,
@@ -18,14 +17,14 @@ export default {
         } = req.body;
         const entity = {
             title: title,
-            register_address: registerAddress,
+            registerAddress: registerAddress,
             location: location,
             profit: profit,
-            land_area: landArea,
-            construction_area: constructionArea,
+            landArea: landArea,
+            constructionArea: constructionArea,
             description: description,
-            total_supply: totalSupply,
-            certificate_path: certificatePath,
+            totalSupply: totalSupply,
+            certificatePath: certificatePath,
         }
         try {
             estate.registry(entity)
@@ -88,6 +87,14 @@ export default {
                 }
             }
 
+            if (files.length < 1) {
+                res.send({
+                    exitcode: 401,
+                    message: "Certificate not found"
+                })
+                return;
+            }
+
             console.log(`Uploading ${files.length} file(s)...`);
             const cid = await storage.put(files);
             console.log(`Uploading done: ${cid}`);
@@ -97,6 +104,7 @@ export default {
                 message: "Upload successfully",
                 cid: cid
             })
+
         } catch (err) {
             console.error(err)
             res.send({
@@ -135,25 +143,10 @@ export default {
                 })
                 return;
             }
-            const entity = {
-                approval: result.approval,
-                certificatePath: result.certificate_path,
-                constructionArea: result.construction_area,
-                description: result.description,
-                id: result.id,
-                ipfsCid: result.ipfs_cid,
-                landArea: result.land_area,
-                location: result.location,
-                profit: result.profit,
-                registerAddress: result.register_address,
-                title: result.title,
-                tokenId: result.token_id,
-                totalSupply: result.total_supply
-            }
             res.send({
                 exitcode: 0,
                 message: "Get information successfully",
-                estate: entity
+                estate: result
             })
         } catch (err) {
             console.error(err)
