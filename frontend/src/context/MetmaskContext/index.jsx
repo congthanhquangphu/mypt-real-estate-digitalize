@@ -4,14 +4,12 @@ import React, { useEffect, useState } from "react";
 
 export const MetamaskContext = React.createContext();
 
-const { ethereum } = window;
-const provider = new ethers.providers.Web3Provider(ethereum, "any");
-
 export const MetamaskProvider = ({ children }) => {
+  const { ethereum } = window;
+  const provider = new ethers.providers.Web3Provider(ethereum, "any");
+
   const [currentAccount, setCurrentAccount] = useState("");
   const [currentBalance, setCurrentBalance] = useState(0);
-  const [currentUtilityBalance, setCurrentUtilityBalance] = useState(0);
-  const [utilityTokenSymbol, setUtilityTokenSymbol] = useState("");
 
   const getContract = (address, abi, isView = true) => {
     let contract;
@@ -24,29 +22,6 @@ export const MetamaskProvider = ({ children }) => {
     return contract;
   };
 
-  const getCrowdsaleContract = (isView = true) => {
-    const contract = config.contract.CROWDSALE_CONTRACT;
-    return getContract(contract.address, contract.abi, isView);
-  };
-
-  const getUtilityContract = (isView = true) => {
-    const contract = config.contract.UTILITY_TOKEN_CONTRACT;
-    return getContract(contract.address, contract.abi, isView);
-  };
-
-  const getSecurityContract = (isView = true) => {
-    const contract = config.contract.SECURITY_TOKEN_CONTRACT;
-    return getContract(contract.address, contract.abi, isView);
-  };
-
-  ethereum.on("accountsChanged", async () => {
-    checkWalletConnected();
-  });
-
-  ethereum.on("chainChanged", async () => {
-    checkWalletConnected();
-  });
-
   const assertMetamask = () => {
     if (!ethereum) {
       throw Error("Metamask extension not found");
@@ -56,8 +31,6 @@ export const MetamaskProvider = ({ children }) => {
   const resetData = () => {
     setCurrentAccount("");
     setCurrentBalance(0);
-    setCurrentUtilityBalance(0);
-    setUtilityTokenSymbol("");
   };
 
   const getListAccount = async () => {
@@ -67,83 +40,19 @@ export const MetamaskProvider = ({ children }) => {
     return accounts;
   };
 
-  const checkWalletConnected = async () => {
+  const updateAccount = async () => {
+    const accounts = await getListAccount();
+    if (!accounts.length) return;
+
+    const account = accounts[0];
+    setCurrentAccount(account);
+  };
+
+  const refreshData = async () => {
     try {
-      assertMetamask();
       resetData();
-
-      const accounts = await getListAccount();
-      if (!accounts.length) return;
-
-      const account = accounts[0];
-      setCurrentAccount(account);
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-
-  const updateUtilityBalance = async () => {
-    try {
-      const utilityContract = getUtilityContract();
-      const utilityBalance = await utilityContract.balanceOf(currentAccount);
-      setCurrentUtilityBalance(ethers.utils.formatEther(utilityBalance));
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-
-  const getSecurityOwnedToken = async (limit, offset) => {
-    const tokens = await getSecurityOwnedTokenIds();
-    if (offset >= tokens.length) {
-      throw Error("Index out of boundary");
-    }
-    return tokens.slice(offset, Math.min(tokens.length, offset + limit));
-  };
-
-  const getSecurityOwnedTokenCount = async () => {
-    const tokens = await getSecurityOwnedTokenIds();
-    return tokens.length;
-  };
-
-  const getSecurityOwnedTokenIds = async () => {
-    const ids = await getSecurityTokenIds();
-    const balances = await getSecurityTokenBatch(ids);
-    const result = balances
-      .map((balance, index) => {
-        return {
-          tokenId: ids[index],
-          balance,
-        };
-      })
-      .filter((token) => token.balance > 0);
-    return result;
-  };
-
-  const getSecurityTokenIds = async () => {
-    try {
-      const securityContract = getSecurityContract();
-      const ids = await securityContract.getIds();
-      const result = ids.map(
-        (id) => ethers.utils.formatEther(id) * Math.pow(10, 18)
-      );
-      return result;
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
-
-  const getSecurityTokenBatch = async (ids) => {
-    try {
-      const securityContract = getSecurityContract();
-      const addresses = ids.map((_) => currentAccount);
-      const balances = await securityContract.balanceOfBatch(addresses, ids);
-      const result = balances.map((balance) =>
-        parseInt(ethers.utils.formatEther(balance) * Math.pow(10, 18))
-      );
-      return result;
+      assertMetamask();
+      updateAccount();
     } catch (err) {
       console.error(err);
       throw err;
@@ -155,64 +64,8 @@ export const MetamaskProvider = ({ children }) => {
       const balance = await provider.getBalance(currentAccount);
       setCurrentBalance(ethers.utils.formatEther(balance));
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw err;
-    }
-  };
-
-  const updateUtilitySymbol = async () => {
-    try {
-      const utilityContract = getUtilityContract();
-      const symbol = await utilityContract.symbol();
-      setUtilityTokenSymbol(symbol);
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-
-  const getUtilityPrice = async (amount) => {
-    try {
-      const rate = await getUtilityRate();
-      const price = (amount * 1.0) / rate;
-      return price;
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-
-  const buyUtilityToken = async (receiver, deposit) => {
-    try {
-      const crowdsaleContract = await getCrowdsaleContract(false);
-      const transaction = await crowdsaleContract.buyTokens(receiver, {
-        value: ethers.utils.parseEther(deposit.toString()),
-      });
-      return await transaction.wait();
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-
-  const withdrawUtilityToken = async (receiver) => {
-    try {
-      const crowdsaleContract = await getCrowdsaleContract(false);
-      const transaction = await crowdsaleContract.withdrawTokens(receiver);
-      return await transaction.wait();
-    } catch (err) {
-      console.log(err);
-      throw err;
-    }
-  };
-
-  const getUtilityRate = async () => {
-    try {
-      const crowdsaleContract = getCrowdsaleContract();
-      const rate = await crowdsaleContract.rate();
-      return ethers.utils.formatEther(rate) * Math.pow(10, 18);
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -230,7 +83,7 @@ export const MetamaskProvider = ({ children }) => {
       }
     }
 
-    await checkWalletConnected();
+    await refreshData();
   };
 
   const addNetwork = async (network) => {
@@ -247,54 +100,33 @@ export const MetamaskProvider = ({ children }) => {
     });
   };
 
-  const mintToken = async (tokenId, uri, beneficiary, totalSupply) => {
-    try {
-      const securityContract = getSecurityContract(false);
-      const transaction = await securityContract.mintToken(
-        tokenId,
-        uri,
-        beneficiary,
-        totalSupply
-      );
-      return await transaction.wait();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   useEffect(() => {
-    checkWalletConnected();
-    updateUtilitySymbol();
+    refreshData();
   }, []);
 
   useEffect(() => {
-    if (currentAccount === "") {
-      return;
-    }
-    
+    if (currentAccount === "") return;
     updateBalance();
-    updateUtilityBalance();
-    updateUtilitySymbol();
   }, [currentAccount]);
+
+  ethereum.on("accountsChanged", async () => {
+    refreshData();
+  });
+
+  ethereum.on("chainChanged", async () => {
+    refreshData();
+  });
 
   return (
     <MetamaskContext.Provider
       value={{
         connectWallet,
         switchNetwork,
-        buyUtilityToken,
-        getUtilityPrice,
-        getUtilityRate,
-        getSecurityOwnedTokenCount,
-        getSecurityTokenIds,
-        withdrawUtilityToken,
-        mintToken,
-        getSecurityOwnedToken,
-        getSecurityTokenBatch,
         currentAccount,
         currentBalance,
-        currentUtilityBalance,
-        utilityTokenSymbol,
+        ethereum,
+        provider,
+        getContract,
       }}
     >
       {children}

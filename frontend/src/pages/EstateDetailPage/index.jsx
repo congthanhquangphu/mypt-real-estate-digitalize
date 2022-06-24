@@ -7,12 +7,18 @@ import VerificationCard from "components/VerificationCard";
 import CertificateCard from "components/CertificateCard";
 import EstateTransactionCard from "components/EstateTransactionCard";
 import { MetamaskContext } from "context/MetmaskContext";
+import {
+  SecurityTokenContext,
+  SecurityTokenProvider,
+} from "context/SecurityTokenContext";
 
 const EstateDetailPage = () => {
   const { estateId } = useParams();
   const [estateDetail, setEstateDetail] = useState({});
   const [balance, setBalance] = useState(0);
-  const { currentAccount, getSecurityTokenBatch } = useContext(MetamaskContext);
+
+  const { currentAccount } = useContext(MetamaskContext);
+  const { getSecurityTokenBatch } = useContext(SecurityTokenContext);
 
   const fetchDetail = async () => {
     if (!estateId || currentAccount === "") {
@@ -20,7 +26,6 @@ const EstateDetailPage = () => {
     }
     try {
       const result = await estate.getInformation({ estateId });
-      console.log(result);
       setEstateDetail(result.data.estate);
 
       const balances = await getSecurityTokenBatch([estateId]);

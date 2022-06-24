@@ -128,6 +128,13 @@ export default {
         const { estateId } = req.body
         try {
             const result = await estate.getById(estateId);
+            if (result === null) {
+                res.send({
+                    exitcode: 401,
+                    message: "Estate not found"
+                })
+                return;
+            }
             const entity = {
                 approval: result.approval,
                 certificatePath: result.certificate_path,

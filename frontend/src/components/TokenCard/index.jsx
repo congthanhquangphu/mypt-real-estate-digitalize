@@ -5,10 +5,13 @@ import { useEffect } from "react";
 import config from "utils/config";
 import BasicEstateItem from "components/BasicEstateItem";
 import estate from "services/estate";
+import { SecurityTokenContext } from "context/SecurityTokenContext";
 
 const TokenCard = () => {
-  const { currentAccount, getSecurityOwnedTokenCount, getSecurityOwnedToken } =
-    useContext(MetamaskContext);
+  const { currentAccount } = useContext(MetamaskContext);
+  const { getSecurityOwnedTokenCount, getSecurityOwnedToken } =
+    useContext(SecurityTokenContext);
+
   const [page, setPage] = useState(1);
   const [totalToken, setTotalToken] = useState(0);
   const [tokens, setTokens] = useState([]);
@@ -30,7 +33,7 @@ const TokenCard = () => {
     const listToken = [];
     for (const index in ownedTokens) {
       const data = {
-        estate_id: ownedTokens[index].token_id,
+        estateId: ownedTokens[index].tokenId,
       };
 
       try {

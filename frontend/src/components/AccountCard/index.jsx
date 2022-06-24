@@ -2,16 +2,14 @@ import React, { useContext } from "react";
 import defaultAvatar from "res/default_avatar.png";
 import { MetamaskContext } from "context/MetmaskContext";
 import MetamaskButton from "components/MetamaskButton";
+import { UtilityTokenContext } from "context/UtilityTokenContext";
 
 const AccountCard = (props) => {
   const className = props.className || "";
 
-  const {
-    currentAccount,
-    currentBalance,
-    currentUtilityBalance,
-    utilityTokenSymbol,
-  } = useContext(MetamaskContext);
+  const { currentAccount, currentBalance } = useContext(MetamaskContext);
+  const { currentUtilityBalance, utilityTokenSymbol } =
+    useContext(UtilityTokenContext);
 
   return (
     <div className={`p-5 bg-white rounded-xl ${className}`}>

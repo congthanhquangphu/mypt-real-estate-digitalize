@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button, Form, Input, InputNumber, notification } from "antd";
-import { MetamaskContext } from "context/MetmaskContext";
 import { useForm } from "antd/lib/form/Form";
+
+import { MetamaskContext } from "context/MetmaskContext";
+import { UtilityTokenContext } from "context/UtilityTokenContext";
 import utils from "utils/utils";
-import "ethers";
+import { CrowdSaleContext } from "context/CrowdSaleContext";
 
 const BuyUtilityTokenCard = (props) => {
-
+  
   const className = props.className || "";
+  const { currentAccount, currentBalance } = useContext(MetamaskContext);
+  const { utilityTokenSymbol } = useContext(UtilityTokenContext);
   const {
     buyUtilityToken,
-    utilityTokenSymbol,
     getUtilityRate,
-    currentAccount,
     getUtilityPrice,
     withdrawUtilityToken,
-  } = useContext(MetamaskContext);
+  } = useContext(CrowdSaleContext);
 
   const [form] = useForm();
   const [estimatePrice, setEstimatePrice] = useState(0);
@@ -56,7 +58,7 @@ const BuyUtilityTokenCard = (props) => {
       setIsWithdrawLoading(true);
       const transaction = await withdrawUtilityToken(currentAccount);
       console.log(transaction);
-      
+
       setIsWithdrawLoading(false);
       notification["success"]({
         message: "Withdraw utility token",
@@ -92,9 +94,8 @@ const BuyUtilityTokenCard = (props) => {
       });
     } catch (err) {
       notification["error"]({
-        message: 'Buy utility token',
-        description:
-        "Buy failed"
+        message: "Buy utility token",
+        description: "Buy failed",
       });
     }
   };
@@ -125,6 +126,7 @@ const BuyUtilityTokenCard = (props) => {
             <Form.Item name="amount">
               <InputNumber
                 min={0}
+                max={currentBalance * utilityRate}
                 addonAfter={utilityTokenSymbol}
                 style={{ width: "100%" }}
                 size="large"

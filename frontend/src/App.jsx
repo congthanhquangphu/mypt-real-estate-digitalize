@@ -11,6 +11,7 @@ import MarketplacePage from "pages/MarketplacePage";
 import EstateRegistryPage from "pages/EstateRegistryPage";
 import TokenPage from "pages/TokenPage";
 import Layout from "components/Layout";
+import { SecurityTokenProvider } from "context/SecurityTokenContext";
 
 function App() {
   return (
@@ -35,7 +36,14 @@ function App() {
             />
             <Route path="/swap" element={<MarketplacePage sellType="swap" />} />
             <Route path="/token" element={<TokenPage />} />
-            <Route path="/estate/:estateId" element={<EstateDetailPage />} />
+            <Route
+              path="/estate/:estateId"
+              element={
+                <SecurityTokenProvider>
+                  <EstateDetailPage />
+                </SecurityTokenProvider>
+              }
+            />
             <Route path="/estate_registry" element={<EstateRegistryPage />} />
             <Route path="/about_us" element={<AboutUsPage />} />
             <Route path="*" element={<NotFoundPage />} />
