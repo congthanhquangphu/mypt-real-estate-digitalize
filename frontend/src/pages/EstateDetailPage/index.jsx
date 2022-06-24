@@ -1,35 +1,35 @@
 import EstateMetaCard from "components/EstateMetaCard";
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { getInformation } from "services/estate";
+import estate from "services/estate";
 import { message as AntMessage } from "antd";
 import VerificationCard from "components/VerificationCard";
 import CertificateCard from "components/CertificateCard";
 import EstateTransactionCard from "components/EstateTransactionCard";
-import { MetamaskContext } from "context/MetamaskProvider";
+import { MetamaskContext } from "context/MetmaskContext";
 
 const EstateDetailPage = () => {
-  const { estate_id } = useParams();
+  const { estateId } = useParams();
   const [estateDetail, setEstateDetail] = useState({});
   const [balance, setBalance] = useState(0);
   const { currentAccount, getSecurityTokenBatch } = useContext(MetamaskContext);
 
   const fetchDetail = async () => {
-    const data = {
-      estate_id: estate_id,
-    };
-    await getInformation(data, async (err, res) => {
-      if (err) {
-        AntMessage.error("Cannot load estate information");
-        return;
+    if (!estateId || currentAccount === "") {
+      return;
+    }
+    try {
+      const result = await estate.getInformation({ estateId });
+      console.log(result);
+      setEstateDetail(result.data.estate);
+
+      const balances = await getSecurityTokenBatch([estateId]);
+      if (balances.length > 0) {
+        setBalance(balances[0]);
       }
-
-      setEstateDetail(res.data.estate);
-    });
-
-    const balances = await getSecurityTokenBatch([estate_id]);
-    if (balances.length > 0) {
-      setBalance(balances[0]);
+    } catch (err) {
+      console.error(err);
+      AntMessage.error("Cannot load estate information");
     }
   };
 

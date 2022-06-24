@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Button, Select, InputNumber } from "antd";
-import MetamaskButton from "components/MetamaskButton";
-import { capitalizeFirstLetter } from "utils/utils";
+import { Select, InputNumber } from "antd";
+import utils from "utils/utils";
 
 const { Option } = Select;
 const sellTypeMenu = ["listing", "crowdfunding", "bidding", "swap"];
@@ -36,7 +35,7 @@ const TokenSellCard = (props) => {
           >
             {sellTypeMenu.map((item) => (
               <Option key={item} value={item}>
-                {capitalizeFirstLetter(item)}
+                {utils.capitalizeFirstLetter(item)}
               </Option>
             ))}
           </Select>

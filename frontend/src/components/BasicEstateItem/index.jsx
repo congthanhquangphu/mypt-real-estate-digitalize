@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import defaultRealEstate from "res/default_real_estate.jpg";
-import { capitalizeFirstLetter } from "utils/utils";
+import utils from "utils/utils";
 
 const BasicEstateItem = (props) => {
   const id = props.id;
-  const title = props.title || "";
+  const title = props.title || "Title";
   const image = props.image || defaultRealEstate;
   const location = props.location || "";
   const profit = props.profit || 0;
@@ -34,14 +34,14 @@ const BasicEstateItem = (props) => {
         <b>Approval:</b>
         {approval === "pending" ? (
           <div className="text-amber-600">
-            {capitalizeFirstLetter(approval)}
+            {utils.capitalizeFirstLetter(approval)}
           </div>
         ) : approval === "approved" ? (
           <div className="text-green-600">
-            {capitalizeFirstLetter(approval)}
+            {utils.capitalizeFirstLetter(approval)}
           </div>
         ) : (
-          <div className="text-red-600">{capitalizeFirstLetter(approval)}</div>
+          <div className="text-red-600">{utils.capitalizeFirstLetter(approval)}</div>
         )}
         <b>Location:</b>
         <div>{location}</div>

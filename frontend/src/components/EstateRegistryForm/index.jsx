@@ -1,25 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { notification, Button, Input, InputNumber, Upload, Form } from "antd";
-import MetamaskButton from "components/MetamaskButton";
 import { useForm } from "antd/lib/form/Form";
-import { existEmpty } from "utils/utils";
-import * as estate from "services/estate";
-import { MetamaskContext } from "context/MetamaskProvider";
+
+import MetamaskButton from "components/MetamaskButton";
+import utils from "utils/utils";
+import estate from "services/estate";
+import { MetamaskContext } from "context/MetmaskContext";
+
 const { TextArea } = Input;
 
-const EstateRegistryForm = ({ className }) => {
+const EstateRegistryForm = (props) => {
+  const className = props.className || "";
   const { currentAccount } = useContext(MetamaskContext);
+
   const [form] = useForm();
   const [canSubmit, setCanSubmit] = useState(false);
   const [certificatePath, setCertificatePath] = useState("");
 
   const updateCanSubmit = () => {
     const data = form.getFieldsValue();
-    data["register_address"] = currentAccount;
-    data["certificate_path"] = certificatePath;
+    data["registerAddress"] = currentAccount;
+    data["certificatePath"] = certificatePath;
 
-    if (existEmpty(data)) {
+    if (utils.existEmpty(data)) {
       setCanSubmit(false);
       return;
     }
@@ -54,26 +58,26 @@ const EstateRegistryForm = ({ className }) => {
     },
   };
 
-  const onFinish = (data) => {
-    data["register_address"] = currentAccount;
-    data["certificate_path"] = certificatePath;
+  const onFinish = async (data) => {
+    data["registerAddress"] = currentAccount;
+    data["certificatePath"] = certificatePath;
 
-    estate.registry(data, (err, res) => {
-      if (err) {
-        notification["error"]({
-          message: "Registry estate",
-          description: `Registry failed.`,
-        });
-        console.error(err);
-        return;
-      }
+    try {
+      await estate.registry(data);
+
       notification["success"]({
         message: "Registry estate",
         description: `Registry successful.`,
       });
       form.resetFields();
       window.location.reload();
-    });
+    } catch (err) {
+      console.error(err);
+      notification["error"]({
+        message: "Registry estate",
+        description: `Registry failed.`,
+      });
+    }
   };
 
   return (
@@ -88,7 +92,7 @@ const EstateRegistryForm = ({ className }) => {
             <Form.Item name="title">
               <Input size="large" placeholder="Real estate title" />
             </Form.Item>
-            <Form.Item name="total_supply">
+            <Form.Item name="totalSupply">
               <InputNumber
                 min={0}
                 style={{ width: "100%" }}
@@ -122,7 +126,7 @@ const EstateRegistryForm = ({ className }) => {
             <h3>
               Construction area (m<sup>2</sup>)
             </h3>
-            <Form.Item name="land_area">
+            <Form.Item name="landArea">
               <InputNumber
                 style={{ width: "100%" }}
                 min={0}
@@ -130,7 +134,7 @@ const EstateRegistryForm = ({ className }) => {
                 placeholder="50"
               />
             </Form.Item>
-            <Form.Item name="construction_area">
+            <Form.Item name="constructionArea">
               <InputNumber
                 style={{ width: "100%" }}
                 min={0}

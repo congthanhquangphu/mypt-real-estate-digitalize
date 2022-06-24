@@ -1,10 +1,10 @@
-import { MetamaskContext } from "context/MetamaskProvider";
+import { MetamaskContext } from "context/MetmaskContext";
 import { Pagination, Spin } from "antd";
 import React, { useContext, useState } from "react";
 import { useEffect } from "react";
-import * as config from "utils/config";
+import config from "utils/config";
 import BasicEstateItem from "components/BasicEstateItem";
-import * as Estate from "services/estate";
+import estate from "services/estate";
 
 const TokenCard = () => {
   const { currentAccount, getSecurityOwnedTokenCount, getSecurityOwnedToken } =
@@ -20,25 +20,28 @@ const TokenCard = () => {
     const count = await getSecurityOwnedTokenCount();
     setTotalToken(count);
 
-    const item_per_page_token = config.constant.item_per_page_token;
-    const result = await getSecurityOwnedToken(
-      item_per_page_token,
-      (page - 1) * item_per_page_token
+    const itemPerPage = config.ITEM_PER_PAGE_TOKEN;
+    const ownedTokens = await getSecurityOwnedToken(
+      itemPerPage,
+      (page - 1) * itemPerPage
     );
 
+    // Find estate information for each token
     const listToken = [];
-    for (const index in result) {
+    for (const index in ownedTokens) {
       const data = {
-        estate_id: result[index].token_id,
+        estate_id: ownedTokens[index].token_id,
       };
-      await Estate.getInformation(data, (err, res) => {
-        if (err) throw Error("Estate not found");
 
+      try {
+        const result = await estate.getInformation(data);
         listToken.push({
-          ...result[index],
-          ...res.data.estate,
+          ...ownedTokens[index],
+          ...result.data.estate,
         });
-      });
+      } catch (err) {
+        console.error(err);
+      }
     }
 
     setTokens(listToken);
@@ -80,10 +83,10 @@ const TokenCard = () => {
                 title={token.title}
                 location={token.location}
                 profit={token.profit}
-                totalSupply={token.total_supply}
+                totalSupply={token.totalSupply}
               >
                 <div className="grid grid-cols-2 text-left p-2">
-                  <b>Token ID:</b> {token.token_id}
+                  <b>Token ID: </b> {token.tokenId}
                   <b>Amount: </b> {token.balance} tokens
                 </div>
               </BasicEstateItem>
@@ -96,7 +99,7 @@ const TokenCard = () => {
           className="flex flex-row justify-center m-2"
           defaultCurrent={1}
           value={page}
-          defaultPageSize={config.constant.item_per_page_token}
+          defaultPageSize={config.ITEM_PER_PAGE_TOKEN}
           onChange={handlePageChange}
           total={totalToken}
         />

@@ -1,4 +1,4 @@
-import * as config from "utils/config.js";
+import config from "utils/config.js";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 
@@ -25,27 +25,18 @@ export const MetamaskProvider = ({ children }) => {
   };
 
   const getCrowdsaleContract = (isView = true) => {
-    return getContract(
-      config.contract.crowdsaleContract.address,
-      config.contract.crowdsaleContract.abi,
-      isView
-    );
+    const contract = config.contract.CROWDSALE_CONTRACT;
+    return getContract(contract.address, contract.abi, isView);
   };
 
   const getUtilityContract = (isView = true) => {
-    return getContract(
-      config.contract.utilityContract.address,
-      config.contract.utilityContract.abi,
-      isView
-    );
+    const contract = config.contract.UTILITY_TOKEN_CONTRACT;
+    return getContract(contract.address, contract.abi, isView);
   };
 
   const getSecurityContract = (isView = true) => {
-    return getContract(
-      config.contract.securityContract.address,
-      config.contract.securityContract.abi,
-      isView
-    );
+    const contract = config.contract.SECURITY_TOKEN_CONTRACT;
+    return getContract(contract.address, contract.abi, isView);
   };
 
   ethereum.on("accountsChanged", async () => {
@@ -122,7 +113,7 @@ export const MetamaskProvider = ({ children }) => {
     const result = balances
       .map((balance, index) => {
         return {
-          token_id: ids[index],
+          tokenId: ids[index],
           balance,
         };
       })
@@ -230,7 +221,7 @@ export const MetamaskProvider = ({ children }) => {
       method: "eth_requestAccounts",
     });
 
-    const selectedNetwork = config.blockchain.aurora.testnet;
+    const selectedNetwork = config.blockchain.AURORA_TESTNET;
     if (ethereum.networkVersion !== selectedNetwork.chainId) {
       try {
         await switchNetwork(selectedNetwork);
@@ -256,14 +247,14 @@ export const MetamaskProvider = ({ children }) => {
     });
   };
 
-  const mintToken = async (token_id, uri, beneficiary, total_supply) => {
+  const mintToken = async (tokenId, uri, beneficiary, totalSupply) => {
     try {
       const securityContract = getSecurityContract(false);
       const transaction = await securityContract.mintToken(
-        token_id,
+        tokenId,
         uri,
         beneficiary,
-        total_supply
+        totalSupply
       );
       return await transaction.wait();
     } catch (err) {
@@ -277,6 +268,10 @@ export const MetamaskProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (currentAccount === "") {
+      return;
+    }
+    
     updateBalance();
     updateUtilityBalance();
     updateUtilitySymbol();

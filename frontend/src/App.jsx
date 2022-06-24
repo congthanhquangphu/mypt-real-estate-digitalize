@@ -3,11 +3,9 @@ import "antd/dist/antd.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "pages/HomePage";
 import AboutUsPage from "pages/AboutUsPage";
-// import LoginPage from "pages/LoginPage";
-// import SignupPage from "pages/SignupPage";
 import NotFoundPage from "pages/NotFoundPage";
 import EstateDetailPage from "pages/EstateDetailPage";
-import { MetamaskProvider } from "context/MetamaskProvider";
+import { MetamaskProvider } from "context/MetmaskContext";
 import UserPage from "pages/UserPage";
 import MarketplacePage from "pages/MarketplacePage";
 import EstateRegistryPage from "pages/EstateRegistryPage";
@@ -23,10 +21,6 @@ function App() {
             <Route path="/" exact element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/user" element={<UserPage />} />
-
-            {/* <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} /> */}
-
             <Route
               path="/listing"
               element={<MarketplacePage sellType="listing" />}
@@ -40,11 +34,9 @@ function App() {
               element={<MarketplacePage sellType="bidding" />}
             />
             <Route path="/swap" element={<MarketplacePage sellType="swap" />} />
-
             <Route path="/token" element={<TokenPage />} />
-            <Route path="/estate/:estate_id" element={<EstateDetailPage />} />
+            <Route path="/estate/:estateId" element={<EstateDetailPage />} />
             <Route path="/estate_registry" element={<EstateRegistryPage />} />
-
             <Route path="/about_us" element={<AboutUsPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

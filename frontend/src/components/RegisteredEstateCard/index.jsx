@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Pagination } from "antd";
-import { MetamaskContext } from "context/MetamaskProvider";
+import { MetamaskContext } from "context/MetmaskContext";
 import BasicEstateItem from "components/BasicEstateItem";
-import * as config from "utils/config";
-import * as estate from "services/estate";
+import config from "utils/config";
+import estate from "services/estate";
 
 const RegisteredEstateCard = (props) => {
   const className = props.className || "";
@@ -11,7 +11,7 @@ const RegisteredEstateCard = (props) => {
 
   const [listEstate, setListEstate] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalEstate, setTotalEstate] = useState(1);
+  const [totalEstate, setTotalEstate] = useState(0);
 
   useEffect(() => {
     refreshData();
@@ -21,31 +21,33 @@ const RegisteredEstateCard = (props) => {
     setPage(e);
   };
 
-  const refreshData = () => {
-    estate.getCount({ register_address: currentAccount }, (err, res) => {
-      if (err) return;
-
-      const count = parseInt(res.data.count);
+  const refreshData = async () => {
+    if (currentAccount === "") {
+      return;
+    }
+    try {
+      const resultCount = await estate.getCount({
+        registerAddress: currentAccount,
+      });
+      const count = parseInt(resultCount.data.count);
       setTotalEstate(count);
 
-      const itemPerPage = config.constant.item_per_page_registry;
+      const itemPerPage = config.ITEM_PER_PAGE_REGISTRY;
       let data = {
-        register_address: currentAccount,
+        registerAddress: currentAccount,
         limit: itemPerPage,
         offset: (page - 1) * itemPerPage,
       };
-      estate.getList(data, (err, res) => {
-        if (err) return;
-        console.log(res.data.estates)
-        setListEstate(res.data.estates);
-      });
-    });
+
+      const resultList = await estate.getList(data);
+      setListEstate(resultList.data.estates);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
-    <div
-      className={`bg-white flex flex-col rounded-xl w-fit p-4 ${className}`}
-    >
+    <div className={`bg-white flex flex-col rounded-xl w-fit p-4 ${className}`}>
       <div>
         <h1>Uploaded real estates</h1>
         <hr className="m-2" />
@@ -80,7 +82,7 @@ const RegisteredEstateCard = (props) => {
           defaultCurrent={1}
           value={page}
           onChange={onPageChange}
-          pageSize={config.constant.item_per_page_registry}
+          pageSize={config.ITEM_PER_PAGE_REGISTRY}
           total={totalEstate}
         />
       </div>

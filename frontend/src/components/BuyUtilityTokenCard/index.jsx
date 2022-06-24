@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button, Form, Input, InputNumber, notification } from "antd";
-import { MetamaskContext } from "context/MetamaskProvider";
+import { MetamaskContext } from "context/MetmaskContext";
 import { useForm } from "antd/lib/form/Form";
-import { existEmpty } from "utils/utils";
+import utils from "utils/utils";
 import "ethers";
 
-const BuyUtilityTokenCard = ({ className }) => {
+const BuyUtilityTokenCard = (props) => {
+
+  const className = props.className || "";
   const {
     buyUtilityToken,
     utilityTokenSymbol,
@@ -24,7 +26,7 @@ const BuyUtilityTokenCard = ({ className }) => {
 
   const updateSubmit = () => {
     const object = form.getFieldsValue();
-    if (existEmpty(object) || currentAccount === "") {
+    if (utils.existEmpty(object) || currentAccount === "") {
       setCanBuy(false);
       return;
     }
@@ -54,6 +56,7 @@ const BuyUtilityTokenCard = ({ className }) => {
       setIsWithdrawLoading(true);
       const transaction = await withdrawUtilityToken(currentAccount);
       console.log(transaction);
+      
       setIsWithdrawLoading(false);
       notification["success"]({
         message: "Withdraw utility token",

@@ -2,7 +2,7 @@ import config from '#src/config/config'
 import multer from 'multer'
 
 const storage = multer.diskStorage({
-    destination: config.constant.upload_path,
+    destination: config.UPLOAD_PATH,
     filename: (req, file, cb) => {
         const fileName = Date.now() + ".pdf";
         req.body.fileName = fileName;

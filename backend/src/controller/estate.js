@@ -7,25 +7,25 @@ export default {
     async registry(req, res) {
         const {
             title,
-            register_address,
+            registerAddress,
             location,
             profit,
-            land_area,
-            construction_area,
+            landArea,
+            constructionArea,
             description,
-            total_supply,
-            certificate_path
+            totalSupply,
+            certificatePath
         } = req.body;
         const entity = {
-            title,
-            register_address,
-            location,
-            profit,
-            land_area,
-            construction_area,
-            description,
-            total_supply,
-            certificate_path,
+            title: title,
+            register_address: registerAddress,
+            location: location,
+            profit: profit,
+            land_area: landArea,
+            construction_area: constructionArea,
+            description: description,
+            total_supply: totalSupply,
+            certificate_path: certificatePath,
         }
         try {
             estate.registry(entity)
@@ -44,9 +44,9 @@ export default {
     },
 
     async getCount(req, res) {
-        const { register_address, approval } = req.body;
+        const { registerAddress, approval } = req.body;
         try {
-            const result = await estate.countByRegister(register_address, approval)
+            const result = await estate.countByRegister(registerAddress, approval)
             res.send({
                 exitcode: 0,
                 count: result,
@@ -70,17 +70,17 @@ export default {
     },
 
     async uploadIPFS(req, res) {
-        const { estate_id } = req.body
+        const { estateId } = req.body
 
         try {
-            const path = await estate.getCertificatePathById(estate_id);
+            const path = await estate.getCertificatePathById(estateId);
 
             const storage = new Web3Storage({
-                token: config.key.web3storage_token
+                token: config.WEB3STORAGE_TOKEN
             })
             let files = []
 
-            const certificates = await getFilesFromPath(config.constant.upload_path);
+            const certificates = await getFilesFromPath(config.UPLOAD_PATH);
             for (const index in certificates) {
                 if (certificates[index].name.indexOf(path) != -1) {
                     files.push(certificates[index])
@@ -107,9 +107,9 @@ export default {
     },
 
     async getList(req, res) {
-        const { register_address, approval, limit, offset } = req.body;
+        const { registerAddress, approval, limit, offset } = req.body;
         try {
-            const estateList = await estate.getByRegister(register_address, approval, limit, offset);
+            const estateList = await estate.getByRegister(registerAddress, approval, limit, offset);
             res.send({
                 exitcode: 0,
                 message: "Get list of estate successfully",
@@ -125,14 +125,28 @@ export default {
     },
 
     async getInformation(req, res) {
-        const { estate_id } = req.body
+        const { estateId } = req.body
         try {
-            const result = await estate.getById(estate_id);
-            console.log(result)
-            return res.send({
+            const result = await estate.getById(estateId);
+            const entity = {
+                approval: result.approval,
+                certificatePath: result.certificate_path,
+                constructionArea: result.construction_area,
+                description: result.description,
+                id: result.id,
+                ipfsCid: result.ipfs_cid,
+                landArea: result.land_area,
+                location: result.location,
+                profit: result.profit,
+                registerAddress: result.register_address,
+                title: result.title,
+                tokenId: result.token_id,
+                totalSupply: result.total_supply
+            }
+            res.send({
                 exitcode: 0,
                 message: "Get information successfully",
-                estate: result
+                estate: entity
             })
         } catch (err) {
             console.error(err)
@@ -144,9 +158,9 @@ export default {
     },
 
     async acceptRegistry(req, res) {
-        const { estate_id, cid, token_id } = req.body;
+        const { estateId, cid, tokenId } = req.body;
         try {
-            const result = await estate.acceptRegistry(estate_id, token_id, cid);
+            const result = await estate.acceptRegistry(estateId, tokenId, cid);
             res.send({
                 exitcode: 0,
                 message: "Update estate successfully"

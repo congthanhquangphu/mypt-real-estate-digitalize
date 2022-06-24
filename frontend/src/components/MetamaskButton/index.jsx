@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import { MetamaskContext } from "context/MetamaskProvider";
-import { ApiOutlined } from "@ant-design/icons";
-import { WalletOutlined } from "@ant-design/icons";
+import { MetamaskContext } from "context/MetmaskContext";
+import { WalletOutlined, ApiOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { shortenAddress } from "utils/utils";
+import utils from "utils/utils";
 
-const MetamaskButton = ({ className }) => {
+const MetamaskButton = (props) => {
+  const className = props.className || "";
   const { connectWallet, currentAccount } = useContext(MetamaskContext);
   return (
     <div>
@@ -30,7 +30,7 @@ const MetamaskButton = ({ className }) => {
           shape="round"
           icon={<WalletOutlined />}
         >
-          Wallet: {shortenAddress(currentAccount)}
+          Wallet: {utils.shortenAddress(currentAccount)}
         </Button>
       )}
     </div>

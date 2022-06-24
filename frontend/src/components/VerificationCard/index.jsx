@@ -1,71 +1,73 @@
 import { Button, notification } from "antd";
-import { MetamaskContext } from "context/MetamaskProvider";
+import { MetamaskContext } from "context/MetmaskContext";
 import React, { useEffect, useContext, useState } from "react";
-import { constant } from "utils/config";
-import * as estate from "services/estate";
+import config from "utils/config";
+import estate from "services/estate";
 
 const VerificationCard = (props) => {
   const { currentAccount, mintToken } = useContext(MetamaskContext);
   const [isAcceptLoading, setIsAcceptLoading] = useState(false);
   const className = props.className;
-  const estate_id = props.id;
-  const register_address = props.register_address || "";
-  const total_supply = props.total_supply || 0;
+  const estateId = props.id;
+  const registerAddress = props.registerAddress || "";
+  const totalSupply = props.totalSupply || 0;
   const approval = props.approval || "";
 
   const handleAcceptRegistry = async () => {
     setIsAcceptLoading(true);
 
-    await estate.uploadIPFS({ estate_id: estate_id }, async (err, res) => {
-      if (err) {
-        notification["error"]({
-          message: "Upload to IPFS",
-          description: "Cannot upload to IPFS",
-        });
-        return;
-      }
+    try {
+      // Upload certificate to IPFS
+      const result = await estate.uploadIPFS({ estateId: estateId });
 
+      // Notify uploaded
       notification["success"]({
         message: "Upload to IPFS",
         description: "Done upload to IPFS",
       });
 
-      const cid = res.data.cid;
-      const token_id = estate_id;
+      // Mint tokens
+      const cid = result.data.cid;
+      const tokenId = estateId;
       const transaction = await mintToken(
-        token_id,
+        tokenId,
         cid,
-        register_address,
-        total_supply
+        registerAddress,
+        totalSupply
       );
       console.log(transaction);
 
+      // Accept registry
       const data = {
-        estate_id: estate_id,
-        token_id: token_id,
+        estateId: estateId,
+        tokenId: tokenId,
         cid: cid,
       };
-
-      await estate.mintToken(data, (err, res) => {
-        if (err) {
-          console.log(err);
-
-          notification["error"]({
-            message: "Mint token",
-            description: "Cannot mint tokens",
-          });
-          return;
-        }
+      try {
+        await estate.acceptRegistry(data);
 
         notification["success"]({
           message: "Mint token",
           description: "Verify successfully",
         });
-        window.location.reload();
-      });
 
-      setIsAcceptLoading(false);
-    });
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+
+        notification["error"]({
+          message: "Mint token",
+          description: "Cannot mint tokens",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      notification["error"]({
+        message: "Upload to IPFS",
+        description: "Cannot upload to IPFS",
+      });
+    }
+    setIsAcceptLoading(false);
   };
 
   useEffect(() => {});
@@ -77,7 +79,7 @@ const VerificationCard = (props) => {
         <hr className="my-2" />
       </div>
       {approval === "pending" ? (
-        currentAccount === constant.admin ? (
+        currentAccount === config.ADMIN_ADDRESS ? (
           <div className="w-full flex justify-center items-center text-center p-4 h-3/4">
             <Button
               onClick={handleAcceptRegistry}

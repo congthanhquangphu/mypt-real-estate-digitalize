@@ -2,7 +2,7 @@ import { Button, Modal } from "antd";
 import TokenSellCard from "components/TokenSellCard";
 import React, { useEffect, useState } from "react";
 import defaultEstateImage from "res/default_real_estate.jpg";
-import { capitalizeFirstLetter } from "utils/utils";
+import utils from "utils/utils";
 
 const EstateMetaCard = (props) => {
   const image = props.image || defaultEstateImage;
@@ -10,12 +10,12 @@ const EstateMetaCard = (props) => {
   const approval = props.approval || "";
   const location = props.location || "location";
   const profit = props.profit || 0;
-  const land_area = props.land_area || 0;
-  const construction_area = props.construction_area || 0;
+  const landArea = props.landArea || 0;
+  const constructionArea = props.constructionArea || 0;
   const description = props.description || "";
-  const cid = props.ipfs_cid || "";
-  const token_id = props.token_id || "";
-  const total_supply = props.total_supply || 0;
+  const cid = props.ipfsCid || "";
+  const tokenId = props.tokenId || "";
+  const totalSupply = props.totalSupply || 0;
   const className = props.className;
   const balance = props.balance || 0;
 
@@ -48,21 +48,21 @@ const EstateMetaCard = (props) => {
               <b>Approval: </b>
               {approval === "pending" ? (
                 <div className="text-amber-600">
-                  {capitalizeFirstLetter(approval)}
+                  {utils.capitalizeFirstLetter(approval)}
                 </div>
               ) : approval === "approved" ? (
                 <div className="text-green-600">
-                  {capitalizeFirstLetter(approval)}
+                  {utils.capitalizeFirstLetter(approval)}
                 </div>
               ) : (
                 <div className="text-red-600">
-                  {capitalizeFirstLetter(approval)}
+                  {utils.capitalizeFirstLetter(approval)}
                 </div>
               )}
             </div>
           </div>
           <div className="p-2 rounded-xl h-fit w-[128px] text-center bg-sky-600 text-white">
-            {total_supply} parts
+            {totalSupply} parts
           </div>
         </div>
         <hr className="my-2" />
@@ -74,10 +74,10 @@ const EstateMetaCard = (props) => {
             <b>Estimate profit (APY): </b> {profit}%
           </div>
           <div>
-            <b>Land area: </b> {land_area}m<sup>2</sup>
+            <b>Land area: </b> {landArea}m<sup>2</sup>
           </div>
           <div>
-            <b>Construction area: </b> {construction_area}m<sup>2</sup>
+            <b>Construction area: </b> {constructionArea}m<sup>2</sup>
           </div>
         </div>
         <div className="my-2">
@@ -87,7 +87,7 @@ const EstateMetaCard = (props) => {
         <div className="flex flex-row justify-between items-end">
           <div>
             <div>
-              <b>Token ID:</b> {token_id}
+              <b>Token ID:</b> {tokenId}
             </div>
             <div>
               <b>CID:</b>{" "}

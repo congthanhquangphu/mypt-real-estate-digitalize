@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { ReloadOutlined } from "@ant-design/icons";
 import "./style.css";
 import { Spin } from "antd";
-import { fetchTransaction } from "services/aurorascan";
-import { shortenAddress } from "utils/utils";
-import { MetamaskContext } from "context/MetamaskProvider";
+import aurorascan from "services/aurorascan";
+import utils from "utils/utils";
+import { MetamaskContext } from "context/MetmaskContext";
 
 const UserTransactionCard = (props) => {
   const className = props.className || "";
@@ -13,17 +13,17 @@ const UserTransactionCard = (props) => {
   const [isTransactionLoading, setIsTransactionLoading] = useState(false);
 
   const handleReload = async () => {
-    if (currentAccount==="") return;
-    
+    if (currentAccount === "") return;
+
     setIsTransactionLoading(true);
-    await fetchTransaction(currentAccount);
+    await aurorascan.fetchTransaction(currentAccount);
     setIsTransactionLoading(false);
     refreshData();
   };
 
   const refreshData = () => {
     try {
-      const data = JSON.parse(localStorage.getItem("transaction_history"));
+      const data = JSON.parse(localStorage.getItem("transactionHistory"));
       const history = data.filter((transaction) => {
         return (
           transaction.from === currentAccount ||
@@ -76,8 +76,8 @@ const UserTransactionCard = (props) => {
               return (
                 <tr key={item.hash}>
                   <td>{item.hash}</td>
-                  <td>{shortenAddress(item.from)}</td>
-                  <td>{shortenAddress(item.to)}</td>
+                  <td>{utils.shortenAddress(item.from)}</td>
+                  <td>{utils.shortenAddress(item.to)}</td>
                   <td>{item.amount}</td>
                   <td>{item.token}</td>
                 </tr>
