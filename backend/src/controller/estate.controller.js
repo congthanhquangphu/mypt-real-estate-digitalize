@@ -1,4 +1,4 @@
-import estate from '#src/models/estate'
+import estate from '#src/models/estate.model'
 import { Web3Storage, getFilesFromPath } from 'web3.storage'
 import config from '#src/config/config'
 

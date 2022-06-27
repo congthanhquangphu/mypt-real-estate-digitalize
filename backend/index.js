@@ -1,8 +1,8 @@
 import express from 'express'
 import cors from 'cors'
-import route from '#src/routes/routes'
+import route from '#src/routes/index.routes'
 import config from '#src/config/config'
-import log from '#src/log/log'
+import log from '#src/middlewares/log.mdw'
 
 const app = express()
 
@@ -13,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(log)
-route.assignRoutes(app)
+app.use(route)
 // #endregion middleware
 
 //Start listen
